@@ -16,6 +16,7 @@ class Actor:
             damage += self.strength
         if self.weak:
             damage -= int(damage * 0.25)
+        return damage
 
     def block(self, block):
         self.block_points += block
