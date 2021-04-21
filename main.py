@@ -8,10 +8,14 @@ from cloneslay.card import *
 from cloneslay.deck import *
 
 
-def handle_input():
+def handle_input(displayed_characters):
     for event in pygame.event.get():
         if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
             quit()
+
+    for character in displayed_characters:
+        if character.rect:
+            character.active = character.rect.collidepoint(pygame.mouse.get_pos())
 
 
 def load_image(filename, with_alpha=True):
@@ -33,6 +37,8 @@ class Character:
         self.name = folder.name
         self.animations = dict()
         self.animation = "Idle"
+        self.rect = None
+        self.active = False
         for sub_folder in scandir(folder.path):
             if sub_folder.is_dir():
                 self.animations[sub_folder.name] = Animation(sub_folder)
@@ -40,12 +46,15 @@ class Character:
     def update(self, screen, position, enemy=False):
         actual_animation = self.animations[self.animation]
         sprite = smoothscale(actual_animation.next_image(), (400, 400))
+        self.rect = sprite.get_rect().move(position)
         border = laplacian(sprite)
         if enemy:
             sprite = flip(sprite, True, False)
             border = flip(border, True, False)
+
         screen.blit(sprite, position)
-        screen.blit(border, position)
+        if self.active:
+            screen.blit(border, position)
 
 
 class Animation:
@@ -89,7 +98,7 @@ if __name__ == '__main__':
 
     clock = pygame.time.Clock()
     while True:
-        handle_input()
+        handle_input([hero, enemy])
         screen.blit(background, (0, 0))
         hero.update(screen, (300, 350))
         enemy.update(screen, (1220, 350), True)
