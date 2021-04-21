@@ -13,7 +13,7 @@ class Card:
         pass
 
     def attack(self, damage, attacker, goal):
-        # damage = attacker.attack(damage)
+        damage = attacker.attack(damage)
         goal.receive_attack(damage)
 
     def block(self, actor):
