@@ -8,6 +8,9 @@ class Card:
     def __str__(self):
         return f"{self.name}: {self.description}"
 
+    def activate(self, actor, goal):
+        pass
+
     def attack(self, damage, attacker, goal):
         # damage = attacker.attack(damage)
         goal.receive_attack(damage)

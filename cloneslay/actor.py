@@ -5,6 +5,18 @@ class Actor:
         self.block_points = block_points
         self.dead = False
 
+        #Buffs
+        self.strength = 0
+
+        #DeBuffs
+        self.weak = 0 # 25% less damage
+
+    def attack(self, damage):
+        if self.strength:
+            damage += self.strength
+        if self.weak:
+            damage -= int(damage * 0.25)
+
     def block(self, block):
         self.block_points += block
 
@@ -18,3 +30,9 @@ class Actor:
             if self.live_points <= 0:
                 self.live_points = 0
                 self.dead = True
+
+    def add_weakness(self, turns):
+        self.weak += turns
+
+    def add_strength(self, quantity):
+        self.strength += quantity
