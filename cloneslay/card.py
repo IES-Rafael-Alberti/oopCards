@@ -12,9 +12,11 @@ class Card:
     def activate(self, actor, goal):
         pass
 
+    @staticmethod
     def attack(self, damage, attacker, goal):
         damage = attacker.attack(damage)
         goal.receive_attack(damage)
 
-    def block(self, actor):
+    @staticmethod
+    def block(actor):
         actor.block()
