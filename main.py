@@ -75,7 +75,7 @@ def print_text(surface, text, font, color=pygame.Color("tomato")):
 if __name__ == '__main__':
     pygame.init()
     pygame.mixer.init()
-    pygame.mixer.music.load("assets/music.mp3")
+    pygame.mixer.music.load("assets/music.ogg")
     pygame.mixer.music.play(loops=-1)
 
     pygame.display.set_caption("Card Game")
