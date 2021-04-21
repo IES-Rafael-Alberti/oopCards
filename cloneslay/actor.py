@@ -6,10 +6,10 @@ class Actor:
         self.dead = False
 
         #Buffs
-        self.strength = 0
+        self.strength = 0 # added to attack damage (absolute)
 
         #DeBuffs
-        self.weak = 0 # 25% less damage
+        self.weak = 0 # (turns) 25% less damage
 
     def attack(self, damage):
         if self.strength:
