@@ -1,5 +1,6 @@
 import pygame
 from pygame.math import Vector2
+from pygame.pixelarray import PixelArray
 from pygame.transform import *
 
 from os import scandir
@@ -47,14 +48,15 @@ class Character:
         actual_animation = self.animations[self.animation]
         sprite = smoothscale(actual_animation.next_image(), (400, 400))
         self.rect = sprite.get_rect().move(position)
-        border = laplacian(sprite)
         if enemy:
             sprite = flip(sprite, True, False)
-            border = flip(border, True, False)
+
+        if self.active:
+            pixels = PixelArray(sprite)
+            pixels.replace(pygame.Color(255, 255, 255, 255), pygame.Color(0, 0, 0, 100), distance=0.4)
+            sprite = pixels.make_surface()
 
         screen.blit(sprite, position)
-        if self.active:
-            screen.blit(border, position)
 
 
 class Animation:
@@ -64,7 +66,8 @@ class Animation:
         self.index = 0
         for image in scandir(folder.path):
             if image.is_file() and image.name.lower().endswith(".png"):
-                self.images.append(pygame.image.load(image.path).convert_alpha())
+                new_image = pygame.image.load(image.path).convert_alpha()
+                self.images.append(new_image)
 
     def next_image(self):
         sprite = self.images[self.index]
@@ -103,4 +106,4 @@ if __name__ == '__main__':
         hero.update(screen, (300, 350))
         enemy.update(screen, (1220, 350), True)
         pygame.display.flip()
-        clock.tick(9)
+        clock.tick(7)
