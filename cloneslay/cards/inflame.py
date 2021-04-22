@@ -6,4 +6,6 @@ class Inflame(Card):
         super().__init__("Inflame", 1, "power", "Gain 2 Strength", None)
 
     def activate(self, actor, goal):
-        actor.add_strength(self, 2)
+        # self is taken with method calling, it is wrong to send self here because it is a Card
+        # try not to call Actor directly from cards, use Card class instead
+        Card.add_strength(2, actor)

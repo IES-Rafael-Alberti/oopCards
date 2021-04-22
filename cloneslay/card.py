@@ -13,10 +13,14 @@ class Card:
         pass
 
     @staticmethod
-    def attack(self, damage, attacker, goal):
+    def attack(damage, attacker, goal):
         damage = attacker.attack(damage)
         goal.receive_attack(damage)
 
     @staticmethod
-    def block(actor):
-        actor.block()
+    def block(block_points, actor):
+        actor.block(block_points)
+
+    @staticmethod
+    def add_strength(strength, actor):
+        actor.add_strength(strength)
