@@ -1,10 +1,10 @@
 from cloneslay.actor import Actor
-from cloneslay.cards.carnage import JoseJavier_Corrigiendo
+from cloneslay.cards.carnage import Carnage
 from cloneslay.cards.defense import Defense
 
 def test_strike():
     my_defense = Defense()
-    my_carnage = JoseJavier_Corrigiendo()
+    my_carnage = Carnage()
     actor1 = Actor([my_carnage, my_defense])
     actor2 = Actor([])
     my_carnage.activate(actor1, actor2)
@@ -14,3 +14,4 @@ def test_strike():
     my_carnage.activate(actor1, actor2)
     assert actor2.block_points == 0
     assert actor2.live_points == 15
+    
