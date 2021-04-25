@@ -2,6 +2,7 @@ import pygame
 from os import scandir
 
 from pygame.math import Vector2
+from pygame.transform import *
 
 from game.character import Character
 
@@ -14,11 +15,13 @@ class Game:
     def _init_game_scene(self):
         pygame.init()
         pygame.mixer.init()
-        pygame.mixer.music.load("assets/music.ogg")
+        pygame.mixer.music.load("assets/music2.ogg")
         pygame.mixer.music.play(loops=-1)
         pygame.display.set_caption("Card Game")
+        pygame.mouse.set_visible(False)
         self.screen = pygame.display.set_mode((1920, 1080))
         self.background = Game.load_image("background")
+        self.cursor = smoothscale(pygame.image.load("assets/cursor/cursor.png"), (25, 25))
         self.characters = Game.load_characters()
 
     def _init_objects(self):
@@ -40,10 +43,11 @@ class Game:
         while True:
             self.handle_input()
             self.screen.blit(self.background, (0, 0))
-            self.hero.update(self.screen, (300, 350))
-            self.enemy.update(self.screen, (1220, 350), True)
+            self.hero.draw(self.screen, Vector2(300, 350))
+            self.enemy.draw(self.screen, Vector2(1220, 350), True)
+            self.screen.blit(self.cursor, pygame.mouse.get_pos())
             pygame.display.flip()
-            clock.tick(7)
+            clock.tick(60)
 
     @staticmethod
     def load_image(filename, with_alpha=True):
