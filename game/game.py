@@ -29,6 +29,8 @@ class Game:
         self.hero = self.characters["Knight"]
         self.enemy = self.characters["Rogue"]
         self.displayed = [self.hero, self.enemy]
+        self.hero.active = True
+        self.active_card_deck = self.hero.actor.deck
 
     def handle_input(self):
         for event in pygame.event.get():

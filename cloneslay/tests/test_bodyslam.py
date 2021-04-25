@@ -1,6 +1,7 @@
 from cloneslay.actor import Actor
 from cloneslay.cards.bodyslam import BodySlam
 
+
 def test_strike():
     my_bodyslam = BodySlam()
     actor1 = Actor([my_bodyslam])
