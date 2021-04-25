@@ -2,6 +2,7 @@ class Actor:
     def __init__(self, deck, live_points=50, block_points=0):
         self.deck = deck
         self.live_points = live_points
+        self.max_live = live_points
         self.block_points = block_points
         self.dead = False
 

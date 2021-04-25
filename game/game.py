@@ -4,6 +4,7 @@ from os import scandir
 from pygame.math import Vector2
 from pygame.transform import *
 
+from cloneslay.actor import Actor
 from game.character import Character
 
 
@@ -60,12 +61,6 @@ class Game:
         character_folders = scandir("assets/characters")
         for folder in character_folders:
             if folder.is_dir():
-                character_dict[folder.name] = Character(folder)
+                character_dict[folder.name] = Character(folder, Actor([]))
         return character_dict
 
-    @staticmethod
-    def print_text(surface, text, font, color=pygame.Color("tomato")):
-        text_surface = font.render(text, True, color)
-        rect = text_surface.get_rect()
-        rect.center = Vector2(surface.get_size()) / 2
-        surface.blit(text_surface, rect)
