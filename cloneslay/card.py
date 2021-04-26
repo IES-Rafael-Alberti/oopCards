@@ -24,3 +24,7 @@ class Card:
     @staticmethod
     def add_strength(strength, actor):
         actor.add_strength(strength)
+
+    @staticmethod
+    def add_vulnerable(turns, actor):
+        actor.add_vulnerable(turns)

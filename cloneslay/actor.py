@@ -28,6 +28,7 @@ class Actor:
 
         # DeBuffs
         self.weak = 0  # (turns) 25% less damage
+        self.vulnerable = 0  # (turns) 50% more damage received
 
     # deck actions
     def get_cards(self, number=5):
@@ -53,6 +54,8 @@ class Actor:
         self.block_points += block
 
     def receive_attack(self, damage):
+        if self.vulnerable:
+            damage += int(damage * 0.5)
         if self.block_points >= damage:
             self.block_points -= damage
         else:
@@ -68,3 +71,6 @@ class Actor:
 
     def add_strength(self, quantity):
         self.strength += quantity
+
+    def add_vulnerable(self, turns):
+        self.vulnerable += turns
