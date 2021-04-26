@@ -1,15 +1,47 @@
+import random
+
+from cloneslay.deck import Deck
+
+
 class Actor:
     def __init__(self, deck, live_points=50, block_points=0):
+        # complete deck of cards for actor
         self.deck = deck
+        # copy deck to draw deck
+        self.draw = Deck(deck)
+        # shuffles draw deck
+        self.draw.shuffle()
+        # init hand, discarded and exhausted decks
+        self.hand = Deck()
+        self.discarded = Deck()
+        self.exhausted = Deck()
+        # get first hand
+        self.get_cards()
+
         self.live_points = live_points
+        self.max_live = live_points
         self.block_points = block_points
         self.dead = False
 
-        #Buffs
-        self.strength = 0 # added to attack damage (absolute)
+        # Buffs
+        self.strength = 0  # added to attack damage (absolute)
 
-        #DeBuffs
-        self.weak = 0 # (turns) 25% less damage
+        # DeBuffs
+        self.weak = 0  # (turns) 25% less damage
+        self.vulnerable = 0  # (turns) 50% more damage received
+
+    # deck actions
+    def get_cards(self, number=5):
+        self.discarded.add(self.hand)
+        self.hand = Deck()
+        cards = self.draw.get(number)
+        rest = number - cards.size()
+        self.hand.add(cards)
+        if rest > 0:
+            self.draw.add(self.discarded)
+            self.discarded = Deck()
+            self.hand.add(self.draw.get(rest))
+
 
     def attack(self, damage):
         if self.strength:
@@ -22,6 +54,8 @@ class Actor:
         self.block_points += block
 
     def receive_attack(self, damage):
+        if self.vulnerable:
+            damage += int(damage * 0.5)
         if self.block_points >= damage:
             self.block_points -= damage
         else:
@@ -37,3 +71,6 @@ class Actor:
 
     def add_strength(self, quantity):
         self.strength += quantity
+
+    def add_vulnerable(self, turns):
+        self.vulnerable += turns
