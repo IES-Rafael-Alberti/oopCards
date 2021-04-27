@@ -66,3 +66,11 @@ class Game:
                 character_dict[folder.name] = Character(folder, Actor([]))
         return character_dict
 
+    @staticmethod
+    def print_text(surface, text, position, color=pygame.Color("white")):
+        font = pygame.font.Font('assets/fonts/Karantina-Light.ttf', 24)
+        text_surface = font.render(text, True, color)
+        rect = text_surface.get_rect()
+        rect.center = position
+        surface.blit(text_surface, rect)
+

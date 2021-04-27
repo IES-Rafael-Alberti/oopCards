@@ -6,7 +6,8 @@ from pygame.math import Vector2
 from pygame.pixelarray import PixelArray
 
 from game.animation import Animation
-from utils import print_text
+#  PEP 8: using import to avoid local name clash
+from game import game
 
 
 class Character:
@@ -42,6 +43,6 @@ class Character:
             if enemy:
                 side = Vector2(20, 0)
             screen.blit(self.active_mark, position + Vector2(sprite.get_rect().width//2, 85) + side)
-        print_text(screen,
-                   f"Block: {self.actor.block_points} Live: {self.actor.live_points}/{self.actor.max_live}",
-                   position + Vector2(self.rect.width//2 + text_side, self.rect.height - 30))
+        game.Game.print_text(screen,
+                             f"Block: {self.actor.block_points} Live: {self.actor.live_points}/{self.actor.max_live}",
+                             position + Vector2(self.rect.width//2 + text_side, self.rect.height - 30))
