@@ -17,3 +17,5 @@ class DisplayedCard:
         sprite = scale(self.frame_image, (300, 300))
         screen.blit(sprite, position + self.active * Vector2(0, -30))
         self.rect = sprite.get_rect().move(position + self.active * Vector2(0, -30))
+        self.rect.height += self.active * 30
+        self.rect.width -= 65

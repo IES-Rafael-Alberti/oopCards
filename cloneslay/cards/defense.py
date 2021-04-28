@@ -7,4 +7,4 @@ class Defense (Card):
 
     # activate must have 2 arguments, you can make goal optional with default: goal=None
     def activate(self, actor, goal=None):
-        self.block(5, actor)
+        Card.block(5, actor)
