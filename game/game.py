@@ -28,8 +28,8 @@ class Game:
         self.characters = Game.load_characters()
 
     def _init_objects(self):
-        self.hero = self.characters["Knight"]
-        self.enemy = self.characters["Rogue"]
+        self.hero = self.characters["Ironclad"]
+        self.enemy = self.characters["Silent"]
         self.enemy.frame = "rogue"
         self.displayed = [self.hero, self.enemy]
         self.hero.active = True
@@ -70,7 +70,7 @@ class Game:
     @staticmethod
     def load_characters():
         character_dict = dict()
-        character_folders = scandir("assets/characters_old")
+        character_folders = scandir("assets/characters")
         for folder in character_folders:
             if folder.is_dir():
                 character_dict[folder.name] = Character(folder, Actor(Game.initial_deck()))
