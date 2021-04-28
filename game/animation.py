@@ -20,7 +20,7 @@ class Animation:
         self.name = folder.name
         self.images = []
         self.index = 0
-        self.frame_rate = 0.05
+        self.frame_rate = 0.1
         images = list(scandir(folder.path))
         images = list(filter(lambda v: extract_number(v) is not None, images))
         images.sort(key=extract_number)
