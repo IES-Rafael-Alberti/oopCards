@@ -39,6 +39,7 @@ class Actor:
         self.hand.add(cards)
         if rest > 0:
             self.draw.add(self.discarded)
+            self.draw.shuffle()
             self.discarded = Deck()
             self.hand.add(self.draw.get(rest))
 

@@ -33,7 +33,7 @@ class Game:
         self.enemy.frame = "rogue"
         self.displayed = [self.hero, self.enemy]
         self.hero.active = True
-        self.active_card_deck = [DisplayedCard(card, self.hero.actor.frame) for card in self.hero.actor.hand.cards]
+        self.active_card_deck = [DisplayedCard(card, self.hero.frame) for card in self.hero.actor.hand.cards]
         self.waiting = True
 
     def handle_input(self):
