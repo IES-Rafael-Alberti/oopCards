@@ -70,7 +70,7 @@ class Game:
     @staticmethod
     def load_characters():
         character_dict = dict()
-        character_folders = scandir("assets/characters")
+        character_folders = scandir("assets/characters_old")
         for folder in character_folders:
             if folder.is_dir():
                 character_dict[folder.name] = Character(folder, Actor(Game.initial_deck()))
