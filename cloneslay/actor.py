@@ -23,6 +23,8 @@ class Actor:
         self.block_points = block_points
         self.dead = False
 
+        self.energy = 3
+
         # Buffs
         self.strength = 0  # added to attack damage (absolute)
 

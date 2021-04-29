@@ -46,5 +46,5 @@ class Character:
             screen.blit(self.active_mark, position + Vector2(sprite.get_rect().width//2, 85) + side)
 
         game.Game.print_text(screen,
-                             f"Block: {self.actor.block_points} Live: {self.actor.live_points}/{self.actor.max_live}",
+                             f"Energy: {self.actor.energy} Block: {self.actor.block_points} Live: {self.actor.live_points}/{self.actor.max_live}",
                              position + Vector2(self.rect.width//2 + text_side, self.rect.height - 30))

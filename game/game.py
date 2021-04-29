@@ -19,7 +19,7 @@ class Game:
         pygame.init()
         pygame.mixer.init()
         pygame.mixer.music.load("assets/music2.ogg")
-        pygame.mixer.music.play(loops=-1)
+        #pygame.mixer.music.play(loops=-1)
         pygame.display.set_caption("Card Game")
         pygame.mouse.set_visible(False)
         self.screen = pygame.display.set_mode((1920, 1080))
@@ -28,8 +28,8 @@ class Game:
         self.characters = Game.load_characters()
 
     def _init_objects(self):
-        self.hero = self.characters["Ironclad"]
-        self.enemy = self.characters["Silent"]
+        self.hero = self.characters["ironclad"]
+        self.enemy = self.characters["silent"]
         self.enemy.frame = "rogue"
         self.displayed = [self.hero, self.enemy]
         self.hero.active = True
@@ -40,26 +40,45 @@ class Game:
         for event in pygame.event.get():
             if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
                 quit()
-
+            if event.type == pygame.MOUSEBUTTONUP:
+                if self.waiting:
+                    for card in self.active_card_deck:
+                        if card.rect and card.rect.collidepoint(pygame.mouse.get_pos()):
+                            if card.card.energy <= self.hero.actor.energy:
+                                card.card.activate(self.hero.actor, self.enemy.actor)
+                                self.hero.actor.energy -= card.card.energy
         # when game in inconsistent state don't poll mouse
         if self.waiting:
             for card in self.active_card_deck:
                 if card.rect:
                     card.active = card.rect.collidepoint(pygame.mouse.get_pos())
 
+    def update_game_logic(self):
+        pass
+
+    def draw_scene(self):
+        self.screen.blit(self.background, (0, 0))
+        self.hero.draw(self.screen, Vector2(100, 250))
+        self.enemy.draw(self.screen, Vector2(1420, 250), True)
+        if self.active_card_deck:
+            initial_position = int(1920 / 2 - 250 * len(self.active_card_deck) / 2)
+            for i, card in enumerate(self.active_card_deck):
+                card.draw(self.screen, Vector2(initial_position + 250 * i, 600))
+        self.screen.blit(self.cursor, pygame.mouse.get_pos())
+        pygame.display.flip()
+
     def game_loop(self):
         clock = pygame.time.Clock()
         while True:
+            # manage user input
             self.handle_input()
-            self.screen.blit(self.background, (0, 0))
-            self.hero.draw(self.screen, Vector2(100, 250))
-            self.enemy.draw(self.screen, Vector2(1420, 250), True)
-            if self.active_card_deck:
-                initial_position = int(1920 / 2 - 250 * len(self.active_card_deck) / 2)
-                for i, card in enumerate(self.active_card_deck):
-                    card.draw(self.screen, Vector2(initial_position + 250 * i, 600))
-            self.screen.blit(self.cursor, pygame.mouse.get_pos())
-            pygame.display.flip()
+
+            # game management
+            self.update_game_logic()
+
+            # draw scene
+            self.draw_scene()
+
             clock.tick(60)
 
     @staticmethod
