@@ -5,6 +5,7 @@ import pygame
 from pygame.transform import *
 from pygame.math import Vector2
 from game.frame import Frame
+from game.animation import Animation
 from pygame.pixelarray import PixelArray
 
 #  PEP 8: using import to avoid local name clash
@@ -24,7 +25,6 @@ class Character:
         self.active_mark = scale(pygame.image.load("assets/your_turn_mark.png").convert_alpha(), (75, 75))
         for file in scandir(folder.path):
             if file.is_file() and file.name.endswith('json'):
-                self.animations.append(file.name.split(".")[0])
                 animations_data = json.load(open(file))
                 for categories, categories_data in animations_data.items():
                     if categories == "frames":
@@ -32,13 +32,19 @@ class Character:
                         for frame, frame_data in categories_data.items():
                             try:
                                 location = frame_data.get("frame")
+                                print(location)
+                                loc_rect = location["x"],-location["y"],location["w"],location["h"]
+                                print(loc_rect)
+                                for file in scandir(folder.path):
+                                    if file.is_file() and file.name.endswith('png'):
+                                        png = pygame.image.load(file)
+                                        png = pygame.transform.chop(png,loc_rect)
                                 duration = frame_data.get("duration")
                                 anim_tag = frame.split("#")[1].split(".")[0]
                                 tag_name = anim_tag.split(" ")[0]
                                 if this_tag == []:
                                     this_tag.append(tag_name)
                                 order_in_tag = anim_tag.split(" ")[1]
-                                png = "por añadir"
 
                                 this_one = Frame(png,tag_name,order_in_tag,duration)
                                 if this_one.tag_name == this_tag[0]:
@@ -56,13 +62,14 @@ class Character:
                                 # None frame does not have number, as its the only one in the anim with only 1 frame
                                 pass
                         self.animations.append(this_tag)
-        for tag in self.animations:
-            print(tag)
-
-
+                        count = 0
+                        for animation in self.animations:
+                            animation = Animation(animation)
+                            self.animations[count] = animation
+                            count += 1
 
     def draw(self, screen, position, enemy=False):
-        actual_animation = self.animations[self.animation]
+        actual_animation = self.animations[0]   # por defecto esta en idle
         sprite = scale(actual_animation.next_image(), (400, 400))
         self.rect = sprite.get_rect().move(position)
         text_side = -65
