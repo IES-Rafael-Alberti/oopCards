@@ -1,4 +1,5 @@
 from os import scandir
+import json
 
 import pygame
 from pygame.transform import *
@@ -20,9 +21,21 @@ class Character:
         self.active_mark = scale(pygame.image.load("assets/your_turn_mark.png").convert_alpha(), (75, 75))
         self.actor = actor
         self.frame = "warrior"
-        for sub_folder in scandir(folder.path):
-            if sub_folder.is_dir():
-                self.animations[sub_folder.name] = animation.Animation(sub_folder)
+        # for sub_folder in scandir(folder.path):
+        #     if sub_folder.is_dir():
+        #         self.animations[sub_folder.name] = animation.Animation(sub_folder)
+        for file in scandir(folder.path):
+            if file.is_file() and file.name.endswith('json'):
+                animation_data = json.load(open())
+                for frame_key, frame_data in animation_data.items():
+                    try:
+                        frame = frame_data.get("frame")
+                        duration = frame_data.get("duration")
+                        ### Extract frame...
+                    except KeyError:
+                        pass
+
+
 
     def draw(self, screen, position, enemy=False):
         actual_animation = self.animations[self.animation]
