@@ -32,13 +32,11 @@ class Character:
                         for frame, frame_data in categories_data.items():
                             try:
                                 location = frame_data.get("frame")
-                                print(location)
-                                loc_rect = location["x"],-location["y"],location["w"],location["h"]
-                                print(loc_rect)
+                                loc_rect = location["x"],location["y"],location["w"],location["h"]
                                 for file in scandir(folder.path):
                                     if file.is_file() and file.name.endswith('png'):
                                         png = pygame.image.load(file)
-                                        png = pygame.transform.chop(png,loc_rect)
+                                        png = pygame.Surface.subsurface(png,loc_rect)
                                 duration = frame_data.get("duration")
                                 anim_tag = frame.split("#")[1].split(".")[0]
                                 tag_name = anim_tag.split(" ")[0]
@@ -69,7 +67,10 @@ class Character:
                             count += 1
 
     def draw(self, screen, position, enemy=False):
-        actual_animation = self.animations[0]   # por defecto esta en idle
+        actual_animation = self.animations[0]  # por defecto esta en idle
+        for animation in self.animations:
+            if animation.name == self.animation:
+                actual_animation = animation
         sprite = scale(actual_animation.next_image(), (400, 400))
         self.rect = sprite.get_rect().move(position)
         text_side = -65
