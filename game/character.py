@@ -4,6 +4,7 @@ import json
 import pygame
 from pygame.transform import *
 from pygame.math import Vector2
+from game.frame import Frame
 from pygame.pixelarray import PixelArray
 
 #  PEP 8: using import to avoid local name clash
@@ -14,26 +15,47 @@ from game import animation
 class Character:
     def __init__(self, folder, actor):
         self.name = folder.name
-        self.animations = dict()
+        self.actor = actor
+        self.animations = []
         self.animation = "Idle"
+        self.frame = "warrior"
         self.rect = None
         self.active = False
         self.active_mark = scale(pygame.image.load("assets/your_turn_mark.png").convert_alpha(), (75, 75))
-        self.actor = actor
-        self.frame = "warrior"
-        # for sub_folder in scandir(folder.path):
-        #     if sub_folder.is_dir():
-        #         self.animations[sub_folder.name] = animation.Animation(sub_folder)
         for file in scandir(folder.path):
             if file.is_file() and file.name.endswith('json'):
-                animation_data = json.load(open())
-                for frame_key, frame_data in animation_data.items():
-                    try:
-                        frame = frame_data.get("frame")
-                        duration = frame_data.get("duration")
-                        ### Extract frame...
-                    except KeyError:
-                        pass
+                animations_data = json.load(open(file))
+                for categories, categories_data in animations_data.items():
+                    if categories == "frames":
+                        this_tag = [] # [0]tag_name, [n != 0]frames of the tag
+                        for frame, frame_data in categories_data.items():
+                            try:
+                                location = frame_data.get("frame")
+                                duration = frame_data.get("duration")
+                                anim_tag = frame.split("#")[1].split(".")[0]
+                                tag_name = anim_tag.split(" ")[0]
+                                if this_tag == []:
+                                    this_tag.append(tag_name)
+                                order_in_tag = anim_tag.split(" ")[1]
+                                png = "por añadir"
+
+                                this_one = Frame(png,tag_name,order_in_tag,duration)
+                                if this_one.tag_name == this_tag[0]:
+                                    this_tag.append(this_one)
+                                else:
+                                    self.animations.append(this_tag)
+                                    this_tag = []
+                                    this_tag.append(this_one.tag_name)
+                                    this_tag.append(this_one)
+                            except KeyError:
+                                pass
+                            except IndexError:
+                                self.animations.append(this_tag)
+                                this_tag = []
+                                # None frame does not have number, as its the only one in the anim with only 1 frame
+                                pass
+                print(self.animations)
+                print(self.animations[1][1].png)
 
 
 

@@ -16,18 +16,9 @@ def extract_number(filename):
 
 
 class Animation:
-    def __init__(self, folder):
-        self.name = folder.name
-        self.images = []
+    def __init__(self, animation):
+        self.name = animation[0]
         self.index = 0
-        self.frame_rate = 0.1
-        images = list(scandir(folder.path))
-        images = list(filter(lambda v: extract_number(v) is not None, images))
-        images.sort(key=extract_number)
-        for image in images:
-            if image.is_file() and image.name.lower().endswith(".png"):
-                new_image = pygame.image.load(image.path).convert_alpha()
-                self.images.append(new_image)
 
     def next_image(self):
         sprite = self.images[int(self.index)]
