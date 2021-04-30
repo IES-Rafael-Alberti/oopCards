@@ -35,6 +35,10 @@ class Card:
         actor.add_vulnerable(turns)
 
     @staticmethod
+    def discard_used_card(name, actor):
+        actor.discard_card(name)
+
+    @staticmethod
     def get_card(class_name):
         module = import_module(f"cloneslay.cards.{class_name.lower()}")
         card_class = getattr(module, class_name)

@@ -4,7 +4,7 @@ from cloneslay.cards.bash import Bash
 
 def test_bash():
     my_bash = Bash()
-    actor1 = Actor([my_bash])
+    actor1 = Actor([my_bash, my_bash, my_bash])
     actor2 = Actor([])
     my_bash.activate(actor1, actor2)
     assert actor2.live_points == 42

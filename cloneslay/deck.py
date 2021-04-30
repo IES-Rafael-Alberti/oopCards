@@ -32,6 +32,12 @@ class Deck:
                 return i
         return None
 
+    def add_one_card(self, card):
+        self.cards.append(card)
+
+    def delte_one_card(self, card):
+        self.cards.remove(card)
+
     def __str__(self):
         result = ""
         for card in self.cards:
