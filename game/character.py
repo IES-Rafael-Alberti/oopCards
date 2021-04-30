@@ -24,6 +24,7 @@ class Character:
         self.active_mark = scale(pygame.image.load("assets/your_turn_mark.png").convert_alpha(), (75, 75))
         for file in scandir(folder.path):
             if file.is_file() and file.name.endswith('json'):
+                self.animations.append(file.name.split(".")[0])
                 animations_data = json.load(open(file))
                 for categories, categories_data in animations_data.items():
                     if categories == "frames":
@@ -54,8 +55,9 @@ class Character:
                                 this_tag = []
                                 # None frame does not have number, as its the only one in the anim with only 1 frame
                                 pass
-                print(self.animations)
-                print(self.animations[1][1].png)
+                        self.animations.append(this_tag)
+        for tag in self.animations:
+            print(tag)
 
 
 

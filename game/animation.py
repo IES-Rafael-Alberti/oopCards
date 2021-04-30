@@ -16,7 +16,8 @@ def extract_number(filename):
 
 
 class Animation:
-    def __init__(self, animation):
+    def __init__(self, animation,character):
+        self.character = character
         self.name = animation[0]
         self.index = 0
 
