@@ -29,7 +29,7 @@ class Game:
 
     def _init_objects(self):
         self.hero = self.characters["ironclad"]
-        self.enemy = self.characters["silent"]
+        self.enemy = self.characters["runecaster"]
         self.enemy.frame = "rogue"
         self.displayed = [self.hero, self.enemy]
         self.hero.active = True
