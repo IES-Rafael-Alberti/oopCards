@@ -7,4 +7,4 @@ class Strike(Card):
 
     def activate(self, actor, goal):
         Card.attack(7, actor, goal)
-        Card.discard_used_card("Strike", actor)
+        # Card.discard_used_card("Strike", actor)

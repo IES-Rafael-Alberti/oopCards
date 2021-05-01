@@ -2,7 +2,7 @@ from importlib import import_module
 
 
 class Card:
-    def __init__(self, name, energy, card_type, description, picture, exhaust=True, ethereal=True):
+    def __init__(self, name, energy, card_type, description, picture, exhaust=False, ethereal=False):
         self.name = name
         self.energy = energy
         self.type = card_type
@@ -34,13 +34,13 @@ class Card:
     def add_vulnerable(turns, actor):
         actor.add_vulnerable(turns)
 
-    @staticmethod
-    def discard_used_card(name, actor):
-        actor.discard_card(name)
-
-    @staticmethod
-    def exhaust_a_card(name, actor):
-        actor.exhaust_card(name)
+    # @staticmethod
+    # def discard_used_card(name, actor):
+    #     actor.discard_card(name)
+    #
+    # @staticmethod
+    # def exhaust_a_card(name, actor):
+    #     actor.exhaust_card(name)
 
     @staticmethod
     def get_card(class_name):
