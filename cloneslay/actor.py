@@ -32,6 +32,18 @@ class Actor:
         self.weak = 0  # (turns) 25% less damage
         self.vulnerable = 0  # (turns) 50% more damage received
 
+    # turn change actions
+    def init_turn(self):
+        self.block_points = 0
+        self.energy = 3
+        self.get_cards()
+
+    def end_turn(self):
+        for card in self.hand.cards[:]:
+            if card.exhaust and card.used or card.ethereal and not card.used:
+                self.exhaust_card(card)
+            card.used = False
+
     # deck actions
     def get_cards(self, number=5):
         self.discarded.add_deck(self.hand)
@@ -45,6 +57,15 @@ class Actor:
             self.discarded = Deck()
             self.hand.add_deck(self.draw.get(rest))
 
+    def discard_card(self, card_name):
+        self.discarded.add_one_card(self.hand.get_card_byname(card_name))
+        self.hand.delte_one_card(self.hand.get_card_byname(card_name))
+
+    def exhaust_card(self, card):
+        self.exhausted.add_card(card)
+        self.hand.delete_card(card)
+
+    # methods implementing card activation actions
     def attack(self, damage):
         if self.strength:
             damage += self.strength
@@ -77,18 +98,6 @@ class Actor:
     def add_vulnerable(self, turns):
         self.vulnerable += turns
 
-    def discard_card(self, card_name):
-        self.discarded.add_one_card(self.hand.get_card_byname(card_name))
-        self.hand.delte_one_card(self.hand.get_card_byname(card_name))
-        
-    def exhaust_card(self, card_name):
-        self.exhausted.add_one_card(self.hand.get_card_byname(card_name))
-        self.hand.delte_one_card(self.hand.get_card_byname(card_name))
 
-    def init_turn(self):
-        self.block_points = 0
-        self.energy = 3
-        self.get_cards()
 
-    def end_turn(self):
-        pass
+

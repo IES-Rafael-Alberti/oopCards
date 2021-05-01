@@ -10,9 +10,14 @@ class Card:
         self.picture = picture
         self.exhaust = exhaust
         self.ethereal = ethereal
+        self.used = False
 
     def __str__(self):
         return f"{self.name}: {self.description}"
+
+    def use(self, actor, goal):
+        self.used = True
+        self.activate(actor, goal)
 
     def activate(self, actor, goal):
         pass

@@ -1,5 +1,5 @@
 from cloneslay.actor import Actor
-from cloneslay.cards.sword_boomerang import Sword_boomerang
+from cloneslay.cards.swordboomerang import Sword_boomerang
 from cloneslay.cards.defense import Defense
 
 def test_strike():

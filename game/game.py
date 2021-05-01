@@ -44,14 +44,15 @@ class Game:
                     if self.end_turn_button.rect.collidepoint(pygame.mouse.get_pos()):
                         self._end_turn()
                     for card in self.active_card_deck:
-                        if card.rect and card.rect.collidepoint(pygame.mouse.get_pos()):
+                        if not card.card.used and card.rect and card.rect.collidepoint(pygame.mouse.get_pos()):
                             if card.card.energy <= self.active_actor.actor.energy:
-                                card.card.activate(self.active_actor.actor, self.get_enemy())
+                                card.card.use(self.active_actor.actor, self.get_enemy())
+                                card.active = False
                                 self.active_actor.actor.energy -= card.card.energy
         # when game in inconsistent state don't poll mouse
         if self.waiting:
             for card in self.active_card_deck:
-                if card.rect:
+                if not card.card.used and card.rect:
                     card.active = card.rect.collidepoint(pygame.mouse.get_pos())
 
     def get_enemy(self):
@@ -121,6 +122,10 @@ class Game:
         card_list = ["Strike"] * 3
         card_list.extend(["Defense"] * 3)
         card_list.append("Bash")
+        card_list.append("Carnage")
+        card_list.append("BodySlam")
+        card_list.append("Inflame")
+        card_list.append("SwordBoomerang")
         return [Card.get_card(card_name) for card_name in card_list]
 
     @staticmethod
