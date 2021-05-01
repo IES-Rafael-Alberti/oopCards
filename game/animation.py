@@ -14,7 +14,6 @@ class Animation:
         for frame in self.frames:
             total += frame.duration
         self.total = total
-        ##                new_image = pygame.image.load(image.path).convert_alpha()
 
     def next_image(self):
         sprite = self.frames[int(self.index)]

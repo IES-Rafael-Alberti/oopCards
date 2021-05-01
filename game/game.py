@@ -2,7 +2,7 @@ import pygame
 from os import scandir
 
 from pygame.math import Vector2
-from pygame.transform import *
+from pygame.transform import scale
 
 from cloneslay.actor import Actor
 from cloneslay.card import Card
@@ -20,7 +20,7 @@ class Game:
         pygame.init()
         pygame.mixer.init()
         pygame.mixer.music.load("assets/music2.ogg")
-        #pygame.mixer.music.play(loops=-1)
+        # pygame.mixer.music.play(loops=-1)
         pygame.display.set_caption("Card Game")
         pygame.mouse.set_visible(False)
         self.screen = pygame.display.set_mode((1920, 1080))
@@ -39,21 +39,28 @@ class Game:
         for event in pygame.event.get():
             if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
                 quit()
-            if event.type == pygame.MOUSEBUTTONUP:
-                if self.waiting:
-                    if self.end_turn_button.rect.collidepoint(pygame.mouse.get_pos()):
-                        self._end_turn()
-                    for card in self.active_card_deck:
-                        if not card.card.used and card.rect and card.rect.collidepoint(pygame.mouse.get_pos()):
-                            if card.card.energy <= self.active_actor.actor.energy:
-                                card.card.use(self.active_actor.actor, self.get_enemy())
-                                card.active = False
-                                self.active_actor.actor.energy -= card.card.energy
+            if event.type == pygame.MOUSEBUTTONUP and self.waiting:
+                self._handle_mouse_up()
         # when game in inconsistent state don't poll mouse
         if self.waiting:
-            for card in self.active_card_deck:
-                if not card.card.used and card.rect:
-                    card.active = card.rect.collidepoint(pygame.mouse.get_pos())
+            self._handle_mouse_over()
+
+    def _handle_mouse_up(self):
+        # end turn button
+        if self.end_turn_button.rect.collidepoint(pygame.mouse.get_pos()):
+            self._end_turn()
+        # cards in hand
+        for card in self.active_card_deck:
+            if not card.card.used and card.rect and card.rect.collidepoint(pygame.mouse.get_pos()) \
+                    and card.card.energy <= self.active_actor.actor.energy:
+                card.card.use(self.active_actor.actor, self.get_enemy())
+                card.active = False
+                self.active_actor.actor.energy -= card.card.energy
+
+    def _handle_mouse_over(self):
+        for card in self.active_card_deck:
+            if not card.card.used and card.rect:
+                card.active = card.rect.collidepoint(pygame.mouse.get_pos())
 
     def get_enemy(self):
         enemies = [displayed_actor.actor for displayed_actor in self.actors if displayed_actor != self.active_actor]
@@ -62,6 +69,7 @@ class Game:
         return enemies
 
     def update_game_logic(self):
+        # prepared for animations state change
         pass
 
     def draw_scene(self):

@@ -20,6 +20,7 @@ class Card:
         self.activate(actor, goal)
 
     def activate(self, actor, goal):
+        # must be implemented in subclasses
         pass
 
     @staticmethod
@@ -38,14 +39,6 @@ class Card:
     @staticmethod
     def add_vulnerable(turns, actor):
         actor.add_vulnerable(turns)
-
-    # @staticmethod
-    # def discard_used_card(name, actor):
-    #     actor.discard_card(name)
-    #
-    # @staticmethod
-    # def exhaust_a_card(name, actor):
-    #     actor.exhaust_card(name)
 
     @staticmethod
     def get_card(class_name):

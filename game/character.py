@@ -2,7 +2,7 @@ from os import scandir
 import json
 
 import pygame
-from pygame.transform import *
+from pygame.transform import scale, flip
 from pygame.math import Vector2
 from game.frame import Frame
 from game.animation import Animation
@@ -59,8 +59,6 @@ class Character:
                             except IndexError:
                                 self.animations.append(this_tag)
                                 this_tag = []
-                                # None frame does not have number, as its the only one in the anim with only 1 frame
-                                pass
                         self.animations.append(this_tag)
                         count = 0
                         for animation in self.animations:
@@ -80,15 +78,10 @@ class Character:
             sprite = flip(sprite, True, False)
             text_side = -text_side
 
-        # if self.active:
-        #     pixels = PixelArray(sprite)
-        #     pixels.replace(pygame.Color(255, 255, 255, 255), pygame.Color(0, 0, 0, 100), distance=0.4)
-        #     sprite = pixels.make_surface()
-
         screen.blit(sprite, self.position)
         if self.active:
             side = Vector2(-self.active_mark.get_rect().width - 20, 0)
-            if flip:
+            if self.flip:
                 side = Vector2(20, 0)
             screen.blit(self.active_mark, self.position + Vector2(sprite.get_rect().width//2, 85) + side)
 

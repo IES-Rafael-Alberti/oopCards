@@ -17,10 +17,7 @@ class DisplayedCard:
         sprite = Surface((300, 300)).convert_alpha()
         sprite.fill(pygame.Color(255, 255, 255, 0))
         sprite.blit(scale(self.card_image, (180, 100)).convert_alpha(), Vector2(45, 60))
-        # sprite = scale(self.card_image, (180, 100))
-        # screen.blit(sprite, position + Vector2(45, 60) + self.active * Vector2(0, -30))
         sprite.blit(scale(self.frame_image, (300, 300)).convert_alpha(), (0, 0))
-        # screen.blit(sprite, position + self.active * Vector2(0, -30))
         self.print_text(sprite, str(self.card.energy), Vector2(30, 30))
         for i, line in enumerate(self.card.description.split(".")):
             self.print_text(sprite, line, Vector2(125, 215 + i * 20),
