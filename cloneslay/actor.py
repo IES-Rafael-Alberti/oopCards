@@ -81,3 +81,7 @@ class Actor:
     def discard_card(self, card_name):
         self.discarded.add_one_card(self.hand.get_one_card(card_name))
         self.hand.delte_one_card(self.hand.get_one_card(card_name))
+        
+    def exhaust_card(self, card_name):
+        self.exhausted.add_one_card(self.hand.get_one_card(card_name))
+        self.hand.delte_one_card(self.hand.get_one_card(card_name))

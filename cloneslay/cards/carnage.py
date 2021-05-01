@@ -7,4 +7,4 @@ class Carnage(Card):
 
     def activate(self, actor, goal):
         Card.attack(20, actor, goal)
-        Card.discard_used_card("Carnage", actor)
+        Card.exhaust_a_card("Carnage", actor)
