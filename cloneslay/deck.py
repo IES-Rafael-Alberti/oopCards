@@ -17,7 +17,7 @@ class Deck:
             self.cards = self.cards[number:]
         return result
 
-    def add(self, other):
+    def add_deck(self, other):
         self.cards.extend(other.cards)
 
     def size(self):
@@ -26,16 +26,16 @@ class Deck:
     def shuffle(self):
         random.shuffle(self.cards)
 
-    def get_one_card(self, card_name):
+    def get_card_byname(self, card_name):
         for i in self.cards:
             if card_name == i.name:
                 return i
         return None
 
-    def add_one_card(self, card):
+    def add_card(self, card):
         self.cards.append(card)
 
-    def delte_one_card(self, card):
+    def delete_card(self, card):
         self.cards.remove(card)
 
     def __str__(self):

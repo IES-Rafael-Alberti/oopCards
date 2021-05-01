@@ -7,4 +7,4 @@ class SwordBoomerang(Card):
 
     def activate(self, actor, goal):
         Card.attack(9, actor, goal)
-        Card.discard_used_card("Sword_boomerang o Batmerang", actor)
+        # Card.discard_used_card("Sword_boomerang o Batmerang", actor)

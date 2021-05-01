@@ -34,17 +34,16 @@ class Actor:
 
     # deck actions
     def get_cards(self, number=5):
-        self.discarded.add(self.hand)
+        self.discarded.add_deck(self.hand)
         self.hand = Deck()
         cards = self.draw.get(number)
         rest = number - cards.size()
-        self.hand.add(cards)
+        self.hand.add_deck(cards)
         if rest > 0:
-            self.draw.add(self.discarded)
+            self.draw.add_deck(self.discarded)
             self.draw.shuffle()
             self.discarded = Deck()
-            self.hand.add(self.draw.get(rest))
-
+            self.hand.add_deck(self.draw.get(rest))
 
     def attack(self, damage):
         if self.strength:
@@ -79,9 +78,17 @@ class Actor:
         self.vulnerable += turns
 
     def discard_card(self, card_name):
-        self.discarded.add_one_card(self.hand.get_one_card(card_name))
-        self.hand.delte_one_card(self.hand.get_one_card(card_name))
+        self.discarded.add_one_card(self.hand.get_card_byname(card_name))
+        self.hand.delte_one_card(self.hand.get_card_byname(card_name))
         
     def exhaust_card(self, card_name):
-        self.exhausted.add_one_card(self.hand.get_one_card(card_name))
-        self.hand.delte_one_card(self.hand.get_one_card(card_name))
+        self.exhausted.add_one_card(self.hand.get_card_byname(card_name))
+        self.hand.delte_one_card(self.hand.get_card_byname(card_name))
+
+    def init_turn(self):
+        self.block_points = 0
+        self.energy = 3
+        self.get_cards()
+
+    def end_turn(self):
+        pass

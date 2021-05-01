@@ -22,6 +22,8 @@ class Character:
         self.frame = "warrior"
         self.rect = None
         self.active = False
+        self.flip = False
+        self.position = Vector2(100, 250)
         self.active_mark = scale(pygame.image.load("assets/your_turn_mark.png").convert_alpha(), (75, 75))
         for file in scandir(folder.path):
             if file.is_file() and file.name.endswith('json'):
@@ -66,15 +68,15 @@ class Character:
                             self.animations[count] = animation
                             count += 1
 
-    def draw(self, screen, position, enemy=False):
+    def draw(self, screen):
         actual_animation = self.animations[0]  # por defecto esta en idle
         for animation in self.animations:
             if animation.name == self.animation:
                 actual_animation = animation
         sprite = scale(actual_animation.next_image(), (400, 400))
-        self.rect = sprite.get_rect().move(position)
+        self.rect = sprite.get_rect().move(self.position)
         text_side = -65
-        if enemy:
+        if self.flip:
             sprite = flip(sprite, True, False)
             text_side = -text_side
 
@@ -83,13 +85,40 @@ class Character:
         #     pixels.replace(pygame.Color(255, 255, 255, 255), pygame.Color(0, 0, 0, 100), distance=0.4)
         #     sprite = pixels.make_surface()
 
-        screen.blit(sprite, position)
+        screen.blit(sprite, self.position)
         if self.active:
             side = Vector2(-self.active_mark.get_rect().width - 20, 0)
-            if enemy:
+            if flip:
                 side = Vector2(20, 0)
-            screen.blit(self.active_mark, position + Vector2(sprite.get_rect().width//2, 85) + side)
+            screen.blit(self.active_mark, self.position + Vector2(sprite.get_rect().width//2, 85) + side)
 
         game.Game.print_text(screen,
-                             f"Energy: {self.actor.energy} Block: {self.actor.block_points} Live: {self.actor.live_points}/{self.actor.max_live}",
-                             position + Vector2(self.rect.width//2 + text_side, self.rect.height - 30))
+                             f"Energy: {self.actor.energy} Block: {self.actor.block_points} "
+                             f"Live: {self.actor.live_points}/{self.actor.max_live}",
+                             self.position + Vector2(self.rect.width//2 + text_side, self.rect.height - 30))
+
+    def with_frame(self, frame):
+        self.frame = frame
+        return self
+
+    def with_position(self, position):
+        self.position = position
+        return self
+
+    def flipped(self):
+        self.flip = True
+        return self
+
+    def activate(self):
+        self.active = True
+        return self
+
+    def deactivate(self):
+        self.active = False
+        return self
+
+    def end_turn(self):
+        self.actor.end_turn()
+
+    def init_turn(self):
+        self.actor.init_turn()

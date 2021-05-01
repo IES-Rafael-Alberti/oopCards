@@ -6,6 +6,7 @@ from pygame.transform import *
 
 from cloneslay.actor import Actor
 from cloneslay.card import Card
+from game.button import Button
 from game.character import Character
 from game.displayed_card import DisplayedCard
 
@@ -26,14 +27,12 @@ class Game:
         self.background = Game.load_image("background")
         self.cursor = scale(pygame.image.load("assets/cursor/cursor.png"), (25, 25))
         self.characters = Game.load_characters()
+        self.end_turn_button = Button(scale(pygame.image.load("assets/end_turn.png"), (250, 150)), Vector2(1600, 700))
 
     def _init_objects(self):
-        self.hero = self.characters["ironclad"]
-        self.enemy = self.characters["runecaster"]
-        self.enemy.frame = "rogue"
-        self.displayed = [self.hero, self.enemy]
-        self.hero.active = True
-        self.active_card_deck = [DisplayedCard(card, self.hero.frame) for card in self.hero.actor.hand.cards]
+        self.actors = [self.characters["ironclad"].with_position(Vector2(100, 250)).activate(),
+                       self.characters["runecaster"].with_position(Vector2(1420, 250)).with_frame("rogue").flipped()]
+        self._set_active()
         self.waiting = True
 
     def handle_input(self):
@@ -42,28 +41,37 @@ class Game:
                 quit()
             if event.type == pygame.MOUSEBUTTONUP:
                 if self.waiting:
+                    if self.end_turn_button.rect.collidepoint(pygame.mouse.get_pos()):
+                        self._end_turn()
                     for card in self.active_card_deck:
                         if card.rect and card.rect.collidepoint(pygame.mouse.get_pos()):
-                            if card.card.energy <= self.hero.actor.energy:
-                                card.card.activate(self.hero.actor, self.enemy.actor)
-                                self.hero.actor.energy -= card.card.energy
+                            if card.card.energy <= self.active_actor.actor.energy:
+                                card.card.activate(self.active_actor.actor, self.get_enemy())
+                                self.active_actor.actor.energy -= card.card.energy
         # when game in inconsistent state don't poll mouse
         if self.waiting:
             for card in self.active_card_deck:
                 if card.rect:
                     card.active = card.rect.collidepoint(pygame.mouse.get_pos())
 
+    def get_enemy(self):
+        enemies = [displayed_actor.actor for displayed_actor in self.actors if displayed_actor != self.active_actor]
+        if len(enemies) == 1:
+            return enemies[0]
+        return enemies
+
     def update_game_logic(self):
         pass
 
     def draw_scene(self):
         self.screen.blit(self.background, (0, 0))
-        self.hero.draw(self.screen, Vector2(100, 250))
-        self.enemy.draw(self.screen, Vector2(1420, 250), True)
+        for displayed_actor in self.actors:
+            displayed_actor.draw(self.screen)
         if self.active_card_deck:
             initial_position = int(1920 / 2 - 250 * len(self.active_card_deck) / 2)
             for i, card in enumerate(self.active_card_deck):
                 card.draw(self.screen, Vector2(initial_position + 250 * i, 600))
+        self.end_turn_button.draw(self.screen)
         self.screen.blit(self.cursor, pygame.mouse.get_pos())
         pygame.display.flip()
 
@@ -80,6 +88,19 @@ class Game:
             self.draw_scene()
 
             clock.tick(60)
+
+    def _set_active(self):
+        for displayed_actor in self.actors:
+            if displayed_actor.active:
+                self.active_actor = displayed_actor
+                self.active_card_deck = [DisplayedCard(card, displayed_actor.frame)
+                                         for card in displayed_actor.actor.hand.cards]
+
+    def _end_turn(self):
+        self.active_actor.deactivate().end_turn()
+        next_actor = (self.actors.index(self.active_actor) + 1) % len(self.actors)
+        self.active_actor = self.actors[next_actor].activate().init_turn()
+        self._set_active()
 
     @staticmethod
     def load_image(filename, with_alpha=True):
