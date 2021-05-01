@@ -39,6 +39,10 @@ class Card:
         actor.discard_card(name)
 
     @staticmethod
+    def exhaust_a_card(name, actor):
+        actor.exhaust_card(name)
+
+    @staticmethod
     def get_card(class_name):
         module = import_module(f"cloneslay.cards.{class_name.lower()}")
         card_class = getattr(module, class_name)
