@@ -26,6 +26,18 @@ class Deck:
     def shuffle(self):
         random.shuffle(self.cards)
 
+    def get_one_card(self, card_name):
+        for i in self.cards:
+            if card_name == i.name:
+                return i
+        return None
+
+    def add_one_card(self, card):
+        self.cards.append(card)
+
+    def delte_one_card(self, card):
+        self.cards.remove(card)
+
     def __str__(self):
         result = ""
         for card in self.cards:

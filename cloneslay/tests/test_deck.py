@@ -9,6 +9,7 @@ def test_get_normal():
     assert my_actor.draw.size() == 17
     assert my_actor.hand.size() == 5
     assert my_actor.discarded.size() == 0
+    assert my_actor.exhausted.size() == 0
     my_actor.get_cards()
     assert my_actor.draw.size() == 12
     assert my_actor.hand.size() == 5
@@ -37,3 +38,16 @@ def test_get_short():
     assert my_actor.draw.size() == 0
     assert my_actor.hand.size() == 4
     assert my_actor.discarded.size() == 0
+
+def test_discard_cards():
+    my_strike = Strike()
+    my_deck = Deck([my_strike for _ in range(22)])
+    my_actor1 = Actor(my_deck)
+    my_actor2 = Actor([])
+    assert my_actor1.draw.size() == 17
+    assert my_actor1.hand.size() == 5
+    assert my_actor1.discarded.size() == 0
+    my_strike.activate(my_actor1, my_actor2)
+    assert my_actor1.draw.size() == 17
+    assert my_actor1.hand.size() == 4
+    assert my_actor1.discarded.size() == 1

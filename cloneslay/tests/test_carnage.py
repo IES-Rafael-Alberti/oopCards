@@ -5,8 +5,8 @@ from cloneslay.cards.defense import Defense
 def test_strike():
     my_defense = Defense()
     my_carnage = Carnage()
-    actor1 = Actor([my_carnage, my_defense])
-    actor2 = Actor([])
+    actor1 = Actor([my_carnage, my_carnage])
+    actor2 = Actor([my_defense])
     my_carnage.activate(actor1, actor2)
     assert actor2.live_points == 30
     my_defense.activate(actor2)

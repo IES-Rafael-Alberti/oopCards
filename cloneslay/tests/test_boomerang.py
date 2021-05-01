@@ -5,8 +5,8 @@ from cloneslay.cards.defense import Defense
 def test_strike():
     my_defense = Defense()
     batmerang = Sword_boomerang()
-    actor1 = Actor([batmerang, my_defense])
-    actor2 = Actor([])
+    actor1 = Actor([batmerang, batmerang])
+    actor2 = Actor([my_defense])
     batmerang.activate(actor1, actor2)
     assert actor2.live_points == 41
     my_defense.activate(actor2)

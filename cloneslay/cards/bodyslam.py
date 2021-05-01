@@ -7,3 +7,4 @@ class BodySlam(Card):
 
     def activate(self, actor, goal):
         Card.attack(actor.block_points, actor, goal)
+        Card.discard_used_card("Body Slam", actor)
