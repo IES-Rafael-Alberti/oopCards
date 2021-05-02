@@ -4,7 +4,7 @@ from cloneslay.deck import Deck
 
 
 class Actor:
-    def __init__(self, deck, live_points=50, block_points=0):
+    def __init__(self, deck, live_points=300, block_points=0):
         # complete deck of cards for actor
         self.deck = deck
         # copy deck to draw deck

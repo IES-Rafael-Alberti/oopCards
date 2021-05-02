@@ -12,6 +12,8 @@ from game.displayed_card import DisplayedCard
 
 
 class Game:
+    debug = True
+
     def __init__(self):
         self._init_game_scene()
         self._init_objects()
@@ -27,11 +29,13 @@ class Game:
         self.background = Game.load_image("background")
         self.cursor = scale(pygame.image.load("assets/cursor/cursor.png"), (25, 25))
         self.characters = Game.load_characters()
-        self.end_turn_button = Button(scale(pygame.image.load("assets/end_turn.png"), (250, 150)), Vector2(1600, 700))
+        self.end_turn_button = Button(scale(pygame.image.load("assets/end_turn.png"), (250, 150)), Vector2(1600, 700),
+                                      "End Turn")
 
     def _init_objects(self):
-        self.actors = [self.characters["ironclad"].with_position(Vector2(100, 250)).activate(),
-                       self.characters["runecaster"].with_position(Vector2(1420, 250)).with_frame("rogue").flipped()]
+        self.actors = [self.characters["ironclad"].with_position(Vector2(100, 150)).activate(),
+                       self.characters["silent"].with_position(Vector2(1420, 150))
+                           .with_frame("rogue").flipped()]
         self.active_actor = self.actors[0]
         self.active_actor.init_turn()
         self._set_active()
@@ -138,8 +142,9 @@ class Game:
         return [Card.get_card(card_name) for card_name in card_list]
 
     @staticmethod
-    def print_text(surface, text, position, color=pygame.Color("white")):
-        font = pygame.font.Font('assets/fonts/Karantina-Regular.ttf', 32)
+    def print_text(surface, text, position, color=pygame.Color("white"),
+                   font_family='assets/fonts/Karantina-Regular.ttf', size=32):
+        font = pygame.font.Font(font_family, size)
         text_surface = font.render(text, True, color)
         rect = text_surface.get_rect()
         rect.center = position
