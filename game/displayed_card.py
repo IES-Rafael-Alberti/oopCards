@@ -26,6 +26,10 @@ class DisplayedCard:
         sprite.blit(scale(self.frame_image, (250, 320)).convert_alpha(), (0, 0))
         game.Game.print_text(sprite, str(self.card.energy), Vector2(33, 30),
                              font_family='assets/fonts/Karantina-Bold.ttf', color=pygame.Color(70, 70, 70, 200))
+        game.Game.print_text(sprite, self.card.name, Vector2(135, 42), color=pygame.Color("white"),
+                             font_family='assets/fonts/Karantina-Light.ttf', size=24)
+        game.Game.print_text(sprite, self.card.type.capitalize(), Vector2(135, 182), color=pygame.Color("white"),
+                             font_family='assets/fonts/Karantina-Regular.ttf', size=24)
         for i, line in enumerate(self.card.description.split(".")):
             game.Game.print_text(sprite, line, Vector2(135, 215 + i * 20), color=pygame.Color("white"),
                                  font_family='assets/fonts/Karantina-Bold.ttf', size=24)
