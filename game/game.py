@@ -32,6 +32,8 @@ class Game:
     def _init_objects(self):
         self.actors = [self.characters["ironclad"].with_position(Vector2(100, 250)).activate(),
                        self.characters["runecaster"].with_position(Vector2(1420, 250)).with_frame("rogue").flipped()]
+        self.active_actor = self.actors[0]
+        self.active_actor.init_turn()
         self._set_active()
         self.waiting = True
 
@@ -101,7 +103,6 @@ class Game:
     def _set_active(self):
         for displayed_actor in self.actors:
             if displayed_actor.active:
-                self.active_actor = displayed_actor
                 self.active_card_deck = [DisplayedCard(card, displayed_actor.frame)
                                          for card in displayed_actor.actor.hand.cards]
 

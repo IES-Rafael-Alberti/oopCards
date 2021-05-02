@@ -15,8 +15,6 @@ class Actor:
         self.hand = Deck()
         self.discarded = Deck()
         self.exhausted = Deck()
-        # get first hand
-        self.get_cards()
 
         self.live_points = live_points
         self.max_live = live_points
@@ -30,12 +28,22 @@ class Actor:
 
         # DeBuffs
         self.weak = 0  # (turns) 25% less damage
+        self.weak_effect = 0.25
         self.vulnerable = 0  # (turns) 50% more damage received
+        self.vulnerable_effect = 0.5
 
     # turn change actions
     def init_turn(self):
+        # reset block points
         self.block_points = 0
+        # reduce effects turn
+        if self.weak:
+            self.weak -= 1
+        if self.vulnerable:
+            self.vulnerable -= 1
+        # reset energy
         self.energy = 3
+        # get hand
         self.get_cards()
 
     def end_turn(self):

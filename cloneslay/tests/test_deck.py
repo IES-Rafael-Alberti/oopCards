@@ -7,6 +7,7 @@ from cloneslay.deck import Deck
 def test_get_normal():
     my_deck = Deck([Strike() for _ in range(22)])
     my_actor = Actor(my_deck)
+    my_actor.get_cards()
     assert my_actor.draw.size() == 17
     assert my_actor.hand.size() == 5
     assert my_actor.discarded.size() == 0

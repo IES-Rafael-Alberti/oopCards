@@ -112,6 +112,8 @@ class Character:
 
     def end_turn(self):
         self.actor.end_turn()
+        return self
 
     def init_turn(self):
         self.actor.init_turn()
+        return self
