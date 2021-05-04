@@ -40,17 +40,23 @@ class Deck:
         self.cards.remove(card)
 
     def load_deck(self, deck_name):
+        # must be in assets dir
         file_decks = os.listdir("../decks/")
+        # str???
         name_file = str(deck_name+ '.json')
+        # you can open the file and control exception
         if not name_file in file_decks:
             return False
         else:
             with open(name_file) as file:
                 deck = json.load(file)
                 deck = deck.rstrip()
+                # you must put TODO comments
 
     def save_deck(self):
+        # apply changes from load_deck
         with open('../decks/'+self.__str__()+'.json', 'w') as file:
+            # json library is not prepared for object serialization
             json.dump(self, file)
 
     def __str__(self):
