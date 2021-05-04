@@ -1,5 +1,6 @@
 import random
-
+import json
+import os
 
 class Deck:
     def __init__(self, cards=None):
@@ -37,6 +38,20 @@ class Deck:
 
     def delete_card(self, card):
         self.cards.remove(card)
+
+    def load_deck(self, deck_name):
+        file_decks = os.listdir("../decks/")
+        name_file = str(deck_name+ '.json')
+        if not name_file in file_decks:
+            return False
+        else:
+            with open(name_file) as file:
+                deck = json.load(file)
+                deck = deck.rstrip()
+
+    def save_deck(self):
+        with open('../decks/'+self.__str__()+'.json', 'w') as file:
+            json.dump(self, file)
 
     def __str__(self):
         result = ""

@@ -2,7 +2,7 @@ from cloneslay.actor import Actor
 from cloneslay.cards.strike import Strike
 from cloneslay.cards.carnage import Carnage
 from cloneslay.deck import Deck
-
+import os
 
 def test_get_normal():
     my_deck = Deck([Strike() for _ in range(22)])
@@ -74,3 +74,11 @@ def test_exhaust_cards():
     assert my_actor1.hand.size() == 3
     assert my_actor1.discarded.size() == 1
     assert my_actor1.exhausted.size() == 1
+
+def test_save_deck():
+    my_strike = Strike()
+    example_deck = Deck([my_strike for _ in range(22)])
+    example_deck.save_deck()
+    file_decks = os.listdir("../decks/")
+    name_file = str(example_deck.__str__()+'.json')
+    assert name_file in file_decks
