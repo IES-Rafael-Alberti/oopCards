@@ -19,66 +19,53 @@ class Character:
     def __init__(self, folder, actor):
         self.name = folder.name
         self.actor = actor
-        self.animations = []
-        self.animation = "Idle"
         self.frame = "warrior"
         self.rect = None
         self.active = False
         self.flip = False
         self.position = Vector2(100, 250)
         self.active_mark = scale(pygame.image.load("assets/your_turn_mark.png").convert_alpha(), (75, 75))
+        self._manage_health_bars()
+        self._animations_load(folder)
+        self.animation = "Idle"
+
+    def _animations_load(self, folder):
+        self.animations = dict()
+        for file in scandir(folder.path):
+            if file.is_file() and file.name.endswith('json'):
+                animations_data = json.load(open(file))
+                self._process_animations_data(animations_data, folder)
+
+    def _process_animations_data(self, animations_data, folder):
+        tags = dict()
+        sprite_sheet = pygame.image.load(folder.path + "/" + animations_data["meta"]["image"])
+        for frame, frame_data in animations_data.get("frames").items():
+            try:
+                location = frame_data.get("frame")
+                loc_rect = location["x"], location["y"], location["w"], location["h"]
+                png = pygame.Surface.subsurface(sprite_sheet, loc_rect)
+                duration = frame_data.get("duration")
+                anim_tag = frame.split("#")[1].split(".")[0]
+                tag_name, order_in_tag = anim_tag.split(" ")
+                if tag_name not in tags:
+                    tags[tag_name] = []
+                tags[tag_name].append(Frame(png, tag_name, order_in_tag, duration))
+            except KeyError:
+                pass
+            except IndexError:
+                pass
+        for animation_name, frame_list in tags.items():
+            self.animations[animation_name]=Animation(animation_name, frame_list)
+
+    def _manage_health_bars(self):
         self.healthbar = dict()
         for file in scandir("assets/healthbars"):
             if file.is_file() and file.name.endswith(".png"):
                 name = file.name.replace(".png", "")
                 self.healthbar[name] = pygame.image.load(file.path).convert_alpha()
-        for file in scandir(folder.path):
-            if file.is_file() and file.name.endswith('json'):
-                animations_data = json.load(open(file))
-                for categories, categories_data in animations_data.items():
-                    if categories == "frames":
-                        this_tag = [] # [0]tag_name, [n != 0]frames of the tag
-                        for frame, frame_data in categories_data.items():
-                            try:
-                                location = frame_data.get("frame")
-                                loc_rect = location["x"],location["y"],location["w"],location["h"]
-                                for file in scandir(folder.path):
-                                    if file.is_file() and file.name.endswith('png'):
-                                        png = pygame.image.load(file)
-                                        png = pygame.Surface.subsurface(png,loc_rect)
-                                duration = frame_data.get("duration")
-                                anim_tag = frame.split("#")[1].split(".")[0]
-                                tag_name = anim_tag.split(" ")[0]
-                                if this_tag == []:
-                                    this_tag.append(tag_name)
-                                order_in_tag = anim_tag.split(" ")[1]
-
-                                this_one = Frame(png,tag_name,order_in_tag,duration)
-                                if this_one.tag_name == this_tag[0]:
-                                    this_tag.append(this_one)
-                                else:
-                                    self.animations.append(this_tag)
-                                    this_tag = []
-                                    this_tag.append(this_one.tag_name)
-                                    this_tag.append(this_one)
-                            except KeyError:
-                                pass
-                            except IndexError:
-                                self.animations.append(this_tag)
-                                this_tag = []
-                        self.animations.append(this_tag)
-                        count = 0
-                        for animation in self.animations:
-                            animation = Animation(animation)
-                            self.animations[count] = animation
-                            count += 1
 
     def draw(self, screen):
-        actual_animation = self.animations[0]  # por defecto esta en idle
-        for animation in self.animations:
-            if animation.name == self.animation:
-                actual_animation = animation
-        sprite = scale(actual_animation.next_image(), (400, 400))
+        sprite = scale(self.animations[self.animation].next_image(), (400, 400))
         self.rect = sprite.get_rect().move(self.position)
         if self.flip:
             sprite = flip(sprite, True, False)
