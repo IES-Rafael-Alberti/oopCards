@@ -1,6 +1,7 @@
 import random
 
 from cloneslay.deck import Deck
+from cloneslay.commands import blocking
 
 
 class Actor:
@@ -23,6 +24,9 @@ class Actor:
 
         self.energy = 3
 
+        self.commands = {"blocking": [],
+                         "energy": []}
+
         # Buffs
         self.strength = 0  # added to attack damage (absolute)
 
@@ -35,7 +39,11 @@ class Actor:
     # turn change actions
     def init_turn(self):
         # reset block points
-        self.block_points = 0
+        if self.commands["blocking"]:
+            for command in self.commands["blocking"]:
+                command.execute(self)
+        else:
+            blocking.Default().execute(self)
         # reduce effects turn
         if self.weak:
             self.weak -= 1
@@ -105,6 +113,10 @@ class Actor:
 
     def add_vulnerable(self, turns):
         self.vulnerable += turns
+
+    def add_command(self, command):
+        self.commands[command.type].append(command)
+        return self
 
 
 
