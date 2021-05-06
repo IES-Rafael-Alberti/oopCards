@@ -1,5 +1,6 @@
 import pygame
 from os import scandir
+from datetime import datetime
 
 from pygame.math import Vector2
 from pygame.transform import scale
@@ -25,6 +26,7 @@ class Game:
         # pygame.mixer.music.play(loops=-1)
         pygame.display.set_caption("Card Game")
         pygame.mouse.set_visible(False)
+        # TODO: manage resolution change
         self.screen = pygame.display.set_mode((1920, 1080))
         self.background = Game.load_image("background")
         self.cursor = scale(pygame.image.load("assets/cursor/cursor.png"), (25, 25))
@@ -93,15 +95,21 @@ class Game:
     def game_loop(self):
         clock = pygame.time.Clock()
         while True:
+            init_time = datetime.now()
             # manage user input
             self.handle_input()
+            # end_time = datetime.now()
+            # print(end_time-init_time)
 
             # game management
             self.update_game_logic()
+            # end_time = datetime.now()
+            # print(end_time-init_time)
 
             # draw scene
             self.draw_scene()
-
+            end_time = datetime.now()
+            print(end_time-init_time)
             clock.tick(60)
 
     def _set_active(self):
@@ -132,7 +140,7 @@ class Game:
 
     @staticmethod
     def initial_deck():
-        card_list = ["Strike"] * 3
+        card_list = ["Barricade"] * 3
         card_list.extend(["Defense"] * 3)
         card_list.append("Bash")
         card_list.append("Carnage")
