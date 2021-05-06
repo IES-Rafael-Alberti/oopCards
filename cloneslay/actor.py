@@ -59,7 +59,7 @@ class Actor:
         for card in self.hand.cards[:]:
             if card.exhaust and card.used or card.ethereal and not card.used:
                 self.exhaust_card(card)
-            elif card.type.lower() == "power" and card.used:
+            elif card.card_type.lower() == "power" and card.used:
                 self.power_used(card)
             card.used = False
 
@@ -120,7 +120,7 @@ class Actor:
         self.vulnerable += turns
 
     def add_command(self, command):
-        self.commands[command.type].append(command)
+        self.commands[command.card_type].append(command)
         return self
 
 

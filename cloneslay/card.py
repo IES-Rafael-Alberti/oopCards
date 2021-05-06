@@ -5,7 +5,7 @@ class Card:
     def __init__(self, name, energy, card_type, description, picture, rarity="Starter", exhaust=False, ethereal=False):
         self.name = name
         self.energy = energy
-        self.type = card_type
+        self.card_type = card_type
         self.description = description
         self.picture = picture
         self.exhaust = exhaust
@@ -48,5 +48,7 @@ class Card:
         return card_class()
 
     @staticmethod
-    def card_list(type=None, rarity=None):
+    def card_list(card_type=None, rarity=None):
+        # TODO: retrieve list of cards
+        pass
 
