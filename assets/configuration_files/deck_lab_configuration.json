@@ -1,0 +1,9 @@
+{
+  "max_points":20,
+  "min_points": 40,
+  "common_value": 1,
+  "uncommon_value": 2,
+  "rare_value": 4,
+  "max_uncommon_cards": 0.25,
+  "max_rare_cards": 0.15
+}

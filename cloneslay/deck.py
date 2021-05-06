@@ -2,6 +2,8 @@ import random
 import json
 import os
 from cloneslay.card import Card
+
+
 class Deck:
     def __init__(self, cards=None):
         if isinstance(cards, Deck):
@@ -42,27 +44,25 @@ class Deck:
     @staticmethod
     def load_deck(deck_name):
         file_decks = os.listdir("../../assets/decks/")
-        name_file = str(deck_name+ '.json')
-        if not name_file in file_decks:
+        name_file = str(deck_name + '.json')
+        if name_file not in file_decks:
             return False
         else:
             file = open("../../assets/decks/" + name_file)
             temporal_deck = []
-            list = json.load(file)
-            for i in list:
+            card_list = json.load(file)
+            for i in card_list:
                 card = Card.get_card(i)
                 temporal_deck.append(card)
             return Deck(temporal_deck)
 
-
     def save_deck(self, deck_name):
-        deck=[]
+        deck = []
         for i in range(self.size()):
             card = self.cards[i]
             card = card.__str__()
             card_name = card.split(":")
             deck.append(card_name[0])
-
         with open('../../assets/decks/'+deck_name+'.json', 'w') as file:
             json.dump(deck, file)
 
