@@ -16,6 +16,7 @@ class Actor:
         self.hand = Deck()
         self.discarded = Deck()
         self.exhausted = Deck()
+        self.powers_applied = Deck()
 
         self.live_points = live_points
         self.max_live = live_points
@@ -58,12 +59,13 @@ class Actor:
         for card in self.hand.cards[:]:
             if card.exhaust and card.used or card.ethereal and not card.used:
                 self.exhaust_card(card)
+            elif card.card_type.lower() == "power" and card.used:
+                self.power_used(card)
             card.used = False
+        self.discard_hand()
 
     # deck actions
     def get_cards(self, number=5):
-        self.discarded.add_deck(self.hand)
-        self.hand = Deck()
         cards = self.draw.get(number)
         rest = number - cards.size()
         self.hand.add_deck(cards)
@@ -73,13 +75,19 @@ class Actor:
             self.discarded = Deck()
             self.hand.add_deck(self.draw.get(rest))
 
+    def discard_hand(self):
+        self.discarded.add_deck(self.hand)
+        self.hand = Deck()
+
     def discard_card(self, card_name):
         self.discarded.add_one_card(self.hand.get_card_byname(card_name))
         self.hand.delte_one_card(self.hand.get_card_byname(card_name))
 
     def exhaust_card(self, card):
-        self.exhausted.add_card(card)
-        self.hand.delete_card(card)
+        self.hand.transfer_card(card, self.exhausted)
+
+    def power_used(self, card):
+        self.hand.transfer_card(card, self.powers_applied)
 
     # methods implementing card activation actions
     def attack(self, damage):
@@ -115,7 +123,7 @@ class Actor:
         self.vulnerable += turns
 
     def add_command(self, command):
-        self.commands[command.type].append(command)
+        self.commands[command.card_type].append(command)
         return self
 
 

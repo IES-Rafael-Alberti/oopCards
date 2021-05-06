@@ -28,7 +28,7 @@ class DisplayedCard:
                              font_family='assets/fonts/Karantina-Bold.ttf', color=pygame.Color(70, 70, 70, 200))
         game.Game.print_text(sprite, self.card.name, Vector2(135, 42), color=pygame.Color("white"),
                              font_family='assets/fonts/Karantina-Light.ttf', size=24)
-        game.Game.print_text(sprite, self.card.type.capitalize(), Vector2(135, 182), color=pygame.Color("white"),
+        game.Game.print_text(sprite, self.card.card_type.capitalize(), Vector2(135, 182), color=pygame.Color("white"),
                              font_family='assets/fonts/Karantina-Regular.ttf', size=24)
         for i, line in enumerate(self.card.description.split(".")):
             game.Game.print_text(sprite, line, Vector2(135, 215 + i * 20), color=pygame.Color("white"),
