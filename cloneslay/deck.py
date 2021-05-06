@@ -2,6 +2,8 @@ import random
 import json
 import os
 from cloneslay.card import Card
+
+
 class Deck:
     def __init__(self, cards=None):
         if isinstance(cards, Deck):
@@ -39,6 +41,10 @@ class Deck:
     def delete_card(self, card):
         self.cards.remove(card)
 
+    def transfer_card(self, card, receiver):
+        self.delete_card(card)
+        receiver.add_card(card)
+
     @staticmethod
     def load_deck(deck_name):
         file_decks = os.listdir("../../assets/decks/")
@@ -53,7 +59,6 @@ class Deck:
                 card = Card.get_card(i)
                 temporal_deck.append(card)
             return Deck(temporal_deck)
-
 
     def save_deck(self, deck_name):
         deck=[]
