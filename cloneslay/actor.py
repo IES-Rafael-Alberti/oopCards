@@ -51,6 +51,7 @@ class Actor:
         self.energy = 3
         # get hand
         self.get_cards()
+        self.execute_commands("posthand")
 
     def end_turn(self):
         for card in self.hand.cards[:]:
@@ -120,7 +121,7 @@ class Actor:
         self.vulnerable += turns
 
     def add_command(self, command):
-        self.commands[command.card_type].append(command)
+        self.commands[command.type].append(command)
         return self
 
     def execute_commands(self, key):

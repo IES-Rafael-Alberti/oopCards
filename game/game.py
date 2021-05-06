@@ -147,6 +147,7 @@ class Game:
         card_list.append("BodySlam")
         card_list.append("Inflame")
         card_list.append("SwordBoomerang")
+        card_list.append("Corruption")
         return [Card.get_card(card_name) for card_name in card_list]
 
     @staticmethod
