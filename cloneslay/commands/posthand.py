@@ -2,7 +2,7 @@ from cloneslay.commands.command import Command
 
 
 class Default(Command):
-    type = "posthand"
+    command_key = "posthand"
 
     def execute(self, actor):
         pass

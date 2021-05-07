@@ -3,7 +3,8 @@ from cloneslay.card import Card
 
 class Inflame(Card):
     def __init__(self):
-        super().__init__("Inflame", 1, "power", "Gain 2 Strength", "inflame.png")
+        super().__init__("Inflame", 1, "power", "Gain 2 Strength", "inflame.png",
+                         rarity="uncommon")
 
     def activate(self, actor, goal):
         # self is taken with method calling, it is wrong to send self here because it is a Card

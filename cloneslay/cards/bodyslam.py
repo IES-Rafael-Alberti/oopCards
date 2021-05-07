@@ -3,7 +3,8 @@ from cloneslay.card import Card
 
 class BodySlam(Card):
     def __init__(self):
-        super().__init__("Body Slam", 1, "attack", "Deal damage equal.to your block", "bodyslam.png")
+        super().__init__("Body Slam", 1, "attack", "Deal damage equal.to your block", "bodyslam.png",
+                         rarity="common")
 
     def activate(self, actor, goal):
         Card.attack(actor.block_points, actor, goal)
