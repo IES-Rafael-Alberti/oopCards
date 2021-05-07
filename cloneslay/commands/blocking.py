@@ -2,7 +2,7 @@ from cloneslay.commands.command import Command
 
 
 class Default(Command):
-    type = "blocking"
+    command_key = "blocking"
 
     def execute(self, actor):
         actor.block_points = 0

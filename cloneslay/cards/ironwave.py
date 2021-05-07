@@ -3,7 +3,8 @@ from cloneslay.card import Card
 
 class IronWave(Card):
     def __init__(self):
-        super().__init__("Iron Wave", 1, "attack", "Gain 5 block.deal 5 damage", "")
+        super().__init__("Iron Wave", 1, "attack", "Gain 5 block.deal 5 damage",
+                         rarity="common")
 
     def activate(self, actor, goal):
         Card.attack(5, actor, goal)

@@ -140,7 +140,7 @@ class Game:
 
     @staticmethod
     def initial_deck():
-        card_list = ["Barricade"] * 3
+        card_list = ["Strike"] * 3
         card_list.extend(["Defense"] * 3)
         card_list.append("Bash")
         card_list.append("Carnage")
@@ -148,6 +148,7 @@ class Game:
         card_list.append("Inflame")
         card_list.append("SwordBoomerang")
         card_list.append("Corruption")
+        card_list.append("Barricade")
         return [Card.get_card(card_name) for card_name in card_list]
 
     @staticmethod
