@@ -9,6 +9,7 @@ import json
 from pygame.math import Vector2
 from pygame.transform import scale
 
+from input_box import InputBox
 from cloneslay.actor import Actor
 from cloneslay.card import Card
 from game.button import Button
@@ -80,6 +81,8 @@ class DeckLab:
                 else:
                     self.showed_cards = self.group_cards[self.group_cards.find(self.showed_cards)+1]
             if self.save_deck_name_button.rect.collidepoint(pygame.mouse.get_pos()):
+                pygame.draw(InputBox.__init__(self,700,500,100,10,"Deck_name"))
+
 
 
         def draw_scene(self):
