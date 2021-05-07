@@ -1,5 +1,4 @@
 from cloneslay.card import Card
-from cloneslay.commands import posthand
 
 
 class Corruption(Card):
@@ -9,6 +8,15 @@ class Corruption(Card):
                          rarity="rare")
 
     def activate(self, actor, goal):
-        command = posthand.CorruptionCommand()
-        command.execute(actor)
-        actor.add_command(command)
+        for card in actor.hand.cards:
+            if card.card_type.lower() == "skill":
+                card.energy = 0
+                card.exhaust = True
+        for card in actor.draw.cards:
+            if card.card_type.lower() == "skill":
+                card.energy = 0
+                card.exhaust = True
+        for card in actor.discarded.cards:
+            if card.card_type.lower() == "skill":
+                card.energy = 0
+                card.exhaust = True
