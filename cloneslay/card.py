@@ -2,8 +2,10 @@ from importlib import import_module
 
 
 class Card:
-    def __init__(self, name, energy, card_type, description, picture, exhaust=False, ethereal=False, rarity="starter"):
+    def __init__(self, name, energy, card_type, description, picture, frame="warrior",
+                 exhaust=False, ethereal=False, rarity="starter"):
         self.name = name
+        self.frame = frame
         self.energy = energy
         self.card_type = card_type
         self.description = description

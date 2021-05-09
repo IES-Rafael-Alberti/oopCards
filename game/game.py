@@ -8,13 +8,16 @@ from pygame.transform import scale
 
 from cloneslay.actor import Actor
 from cloneslay.card import Card
+from game.background import Background
 from game.button import Button
 from game.character import Character
+from game.cursor import Cursor
 from game.displayed_card import DisplayedCard
 
 
 class Game:
     debug = True
+    FPS = 60
     reference_resolution = (1920, 1080)
     resolution = (1920, 1080)
 
@@ -23,26 +26,33 @@ class Game:
         self._init_objects()
 
     def _init_game_scene(self):
+        # detect max resolution
         Game._detect_max_resolution()
+        # init pygame engine
         pygame.init()
         pygame.mixer.init()
+        # music load
         pygame.mixer.music.load("assets/music2.ogg")
         # pygame.mixer.music.play(loops=-1)
+        # game window properties
         pygame.display.set_caption("Card Game")
         pygame.mouse.set_visible(False)
         # TODO: manage resolution change
-        self.screen = pygame.display.set_mode(Game.resolution, pygame.FULLSCREEN)
-        self.background = scale(Game.load_image("background"), Game.resolution)
-        self.cursor = scale(pygame.image.load("assets/cursor/cursor.png"), Game.resize(25, 25))
+        # init game window
+        self.screen = pygame.display.set_mode(Game.resolution)  # , pygame.FULLSCREEN)
+        # set scene objects
+        self.background = Background("background")
+        self.cursor = Cursor("cursor")
+        # self.cursor = scale(pygame.image.load("assets/cursor/cursor.png"), Game.resize(25, 25))
         self.characters = Game.load_characters()
         self.end_turn_button = Button(scale(pygame.image.load("assets/end_turn.png"), Game.resize(250, 150)),
                                       Game.resize(Vector2(1600, 700)), "End Turn")
 
     @staticmethod
     def _detect_max_resolution():
-        Game.resolution = max(pygame.display.list_modes(depth=0),
-                              key=lambda mode: sum(mode))
-        # Game.resolution = (800, 600)
+        # Game.resolution = max(pygame.display.list_modes(depth=0),
+        #                       key=lambda mode: sum(mode))
+        Game.resolution = (1600, 900)
 
     def _init_objects(self):
         self.actors = [self.characters["ironclad"].with_position(Game.resize(Vector2(100, 150))).activate(),
@@ -74,6 +84,11 @@ class Game:
                 card.card.use(self.active_actor.actor, self.get_enemy())
                 card.active = False
                 self.active_actor.actor.energy -= card.card.energy
+                self.update_actors()
+
+    def update_actors(self):
+        for actor in self.actors:
+            actor.update()
 
     def _handle_mouse_over(self):
         for card in self.active_card_deck:
@@ -95,7 +110,6 @@ class Game:
             if len(args) == 1:
                 return Game.resize_x(data), Game.resize_y(args[0])
 
-
     @staticmethod
     def resize_x(x):
         return int(x * Game.resolution[0] / Game.reference_resolution[0])
@@ -115,7 +129,8 @@ class Game:
         pass
 
     def draw_scene(self):
-        self.screen.blit(self.background, (0, 0))
+        init_time = datetime.now()
+        self.background.draw(self.screen)
         for displayed_actor in self.actors:
             displayed_actor.draw(self.screen)
         if self.active_card_deck:
@@ -123,13 +138,13 @@ class Game:
             for i, card in enumerate(self.active_card_deck):
                 card.draw(self.screen, Game.resize(Vector2(initial_position + 250 * i, 600)))
         self.end_turn_button.draw(self.screen)
-        self.screen.blit(self.cursor, pygame.mouse.get_pos())
+        self.cursor.draw(self.screen, pygame.mouse.get_pos())
+        Game.print_text(self.screen, str((datetime.now() - init_time).microseconds//1000), (100, 30))
         pygame.display.flip()
 
     def game_loop(self):
         clock = pygame.time.Clock()
         while True:
-            init_time = datetime.now()
             # manage user input
             self.handle_input()
             # end_time = datetime.now()
@@ -142,9 +157,7 @@ class Game:
 
             # draw scene
             self.draw_scene()
-            end_time = datetime.now()
-            print(end_time-init_time)
-            clock.tick(60)
+            clock.tick(Game.FPS)
 
     def _set_active(self):
         for displayed_actor in self.actors:
@@ -160,7 +173,9 @@ class Game:
 
     @staticmethod
     def load_image(filename, with_alpha=True):
-        image = pygame.image.load("assets/" + filename + ".png")
+        if not filename.endswith(".png"):
+            filename += ".png"
+        image = pygame.image.load(f"assets/{filename}")
         return image.convert_alpha() if with_alpha else image.convert()
 
     @staticmethod
