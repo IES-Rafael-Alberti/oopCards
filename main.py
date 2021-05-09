@@ -4,7 +4,7 @@ import sys
 
 
 if __name__ == '__main__':
-    if sys.argv:
+    if len(sys.argv) > 1:
         myGame = DeckLab()
     else:
         myGame = Game()

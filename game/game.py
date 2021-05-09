@@ -3,6 +3,7 @@ from os import scandir
 from datetime import datetime
 
 from pygame.math import Vector2
+from pygame.rect import Rect
 from pygame.transform import scale
 
 from cloneslay.actor import Actor
@@ -14,12 +15,15 @@ from game.displayed_card import DisplayedCard
 
 class Game:
     debug = True
+    reference_resolution = (1920, 1080)
+    resolution = (1920, 1080)
 
     def __init__(self):
         self._init_game_scene()
         self._init_objects()
 
     def _init_game_scene(self):
+        Game._detect_max_resolution()
         pygame.init()
         pygame.mixer.init()
         pygame.mixer.music.load("assets/music2.ogg")
@@ -27,16 +31,22 @@ class Game:
         pygame.display.set_caption("Card Game")
         pygame.mouse.set_visible(False)
         # TODO: manage resolution change
-        self.screen = pygame.display.set_mode((1920, 1080))
-        self.background = Game.load_image("background")
-        self.cursor = scale(pygame.image.load("assets/cursor/cursor.png"), (25, 25))
+        self.screen = pygame.display.set_mode(Game.resolution, pygame.FULLSCREEN)
+        self.background = scale(Game.load_image("background"), Game.resolution)
+        self.cursor = scale(pygame.image.load("assets/cursor/cursor.png"), Game.resize(25, 25))
         self.characters = Game.load_characters()
-        self.end_turn_button = Button(scale(pygame.image.load("assets/end_turn.png"), (250, 150)), Vector2(1600, 700),
-                                      "End Turn")
+        self.end_turn_button = Button(scale(pygame.image.load("assets/end_turn.png"), Game.resize(250, 150)),
+                                      Game.resize(Vector2(1600, 700)), "End Turn")
+
+    @staticmethod
+    def _detect_max_resolution():
+        Game.resolution = max(pygame.display.list_modes(depth=0),
+                              key=lambda mode: sum(mode))
+        # Game.resolution = (800, 600)
 
     def _init_objects(self):
-        self.actors = [self.characters["ironclad"].with_position(Vector2(100, 150)).activate(),
-                       self.characters["silent"].with_position(Vector2(1420, 150))
+        self.actors = [self.characters["ironclad"].with_position(Game.resize(Vector2(100, 150))).activate(),
+                       self.characters["silent"].with_position(Game.resize(Vector2(1420, 150)))
                            .with_frame("rogue").flipped()]
         self.active_actor = self.actors[0]
         self.active_actor.init_turn()
@@ -70,6 +80,30 @@ class Game:
             if not card.card.used and card.rect:
                 card.active = card.rect.collidepoint(pygame.mouse.get_pos())
 
+    @staticmethod
+    def resize(data, *args):
+        if isinstance(data, Vector2):
+            return Vector2(Game.resize_x(data.x),
+                           Game.resize_y(data.y))
+        if isinstance(data, Rect):
+            return Rect(Game.resize_x(data.x), Game.resize_y(data.y),
+                        Game.resize_x(data.width), Game.resize_y(data.height))
+        if isinstance(data, tuple):
+            x, y = data
+            return Game.resize_x(x), Game.resize_y(y)
+        if isinstance(data, int):
+            if len(args) == 1:
+                return Game.resize_x(data), Game.resize_y(args[0])
+
+
+    @staticmethod
+    def resize_x(x):
+        return int(x * Game.resolution[0] / Game.reference_resolution[0])
+
+    @staticmethod
+    def resize_y(y):
+        return int(y * Game.resolution[1] / Game.reference_resolution[1])
+
     def get_enemy(self):
         enemies = [displayed_actor.actor for displayed_actor in self.actors if displayed_actor != self.active_actor]
         if len(enemies) == 1:
@@ -87,7 +121,7 @@ class Game:
         if self.active_card_deck:
             initial_position = int(1920 / 2 - 250 * len(self.active_card_deck) / 2)
             for i, card in enumerate(self.active_card_deck):
-                card.draw(self.screen, Vector2(initial_position + 250 * i, 600))
+                card.draw(self.screen, Game.resize(Vector2(initial_position + 250 * i, 600)))
         self.end_turn_button.draw(self.screen)
         self.screen.blit(self.cursor, pygame.mouse.get_pos())
         pygame.display.flip()

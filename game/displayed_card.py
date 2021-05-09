@@ -36,7 +36,8 @@ class DisplayedCard:
         # when card is used, change alpha to 100
         if self.card.used:
             sprite.fill((255, 255, 255, 100), special_flags=pygame.BLEND_RGBA_MULT)
-        screen.blit(sprite, position + self.active * Vector2(0, -30))
+        sprite = scale(sprite, game.Game.resize(250, 320))
+        screen.blit(sprite , position + self.active * Vector2(0, -30))
         self.rect = sprite.get_rect().move(position + self.active * Vector2(0, -30))
         # height correction: avoid deactivation/activation loop under the card
         self.rect.height += self.active * 30
