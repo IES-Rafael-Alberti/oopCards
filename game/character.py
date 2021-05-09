@@ -3,16 +3,13 @@ import json
 
 import pygame
 from pygame.rect import Rect
-from pygame.surface import Surface
 from pygame.transform import scale, flip
 from pygame.math import Vector2
 from game.frame import Frame
 from game.animation import Animation
-from pygame.pixelarray import PixelArray
 
 #  PEP 8: using import to avoid local name clash
 from game import game
-from game import animation
 
 
 class Character:
@@ -23,8 +20,8 @@ class Character:
         self.rect = None
         self.active = False
         self.flip = False
-        self.position = Vector2(100, 250)
-        self.active_mark = scale(pygame.image.load("assets/your_turn_mark.png").convert_alpha(), (75, 75))
+        self.position = game.Game.resize(Vector2(100, 250))
+        self.active_mark = scale(pygame.image.load("assets/your_turn_mark.png").convert_alpha(), game.Game.resize(75, 75))
         self._manage_health_bars()
         self._animations_load(folder)
         self.animation = "Idle"
@@ -65,7 +62,7 @@ class Character:
                 self.healthbar[name] = pygame.image.load(file.path).convert_alpha()
 
     def draw(self, screen):
-        sprite = scale(self.animations[self.animation].next_image(), (400, 400))
+        sprite = scale(self.animations[self.animation].next_image(), game.Game.resize(400, 400))
         self.rect = sprite.get_rect().move(self.position)
         if self.flip:
             sprite = flip(sprite, True, False)
@@ -73,7 +70,7 @@ class Character:
         screen.blit(sprite, self.position)
 
         if self.active:
-            screen.blit(self.active_mark, self.position + Vector2(sprite.get_rect().width//2, -85))
+            screen.blit(self.active_mark, self.position + game.Game.resize(Vector2(sprite.get_rect().width//2, -85)))
 
         # health bar
         health_frame_key = "frame_armor" if self.actor.block_points else "frame_no_armor"
@@ -90,21 +87,28 @@ class Character:
             game.Game.print_text(health_sprite, f"{self.actor.block_points}", Vector2(20, 21),
                                  size=24, color=pygame.Color("black"))
             bar_text_color = pygame.Color("black")
-        game.Game.print_text(health_sprite, f"{self.actor.live_points}/{self.actor.max_live}", Vector2(160, 21),
+        game.Game.print_text(health_sprite, f"{self.actor.live_points}/{self.actor.max_live}",
+                             Vector2(160, 21),
                              size=24, color=bar_text_color)
-        screen.blit(health_sprite, self.position + Vector2(70, self.rect.height - 10))
+        screen.blit(scale(health_sprite, game.Game.resize(310, 44)), self.position + Vector2(game.Game.resize_x(70), self.rect.height - 10))
 
         # info
         if game.Game.debug:
             self.show_info(screen)
 
     def show_info(self, screen):
-        game.Game.print_text(screen, f"Energy: {self.actor.energy}", self.position + Vector2(-10, 0))
-        game.Game.print_text(screen, f"Block: {self.actor.block_points}", self.position + Vector2(-10, 25))
+        game.Game.print_text(screen, f"Energy: {self.actor.energy}",
+                             self.position + game.Game.resize(Vector2(-10, 0)),
+                             size=game.Game.resize_x(32))
+        game.Game.print_text(screen, f"Block: {self.actor.block_points}",
+                             self.position + game.Game.resize(Vector2(-10, 25)),
+                             size=game.Game.resize_x(32))
         game.Game.print_text(screen, f"Live: {self.actor.live_points}/{self.actor.max_live}",
-                             self.position + Vector2(-10, 50))
+                             self.position + game.Game.resize(Vector2(-10, 50)),
+                             size=game.Game.resize_x(32))
         game.Game.print_text(screen, f"W:{self.actor.weak} V:{self.actor.vulnerable} S:{self.actor.strength}",
-                             self.position + Vector2(-10, 75))
+                             self.position + game.Game.resize(Vector2(-10, 75)),
+                             size=game.Game.resize_x(32))
 
     def with_frame(self, frame):
         self.frame = frame

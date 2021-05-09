@@ -14,5 +14,6 @@ class Button:
         if self.text:
             game.Game.print_text(self.image, self.text, self.image.get_rect().center,
                                  color=pygame.Color(130, 79, 5),
+                                 size=game.Game.resize_x(32),
                                  font_family='assets/fonts/Karantina-Bold.ttf')
         screen.blit(self.image, self.position)
