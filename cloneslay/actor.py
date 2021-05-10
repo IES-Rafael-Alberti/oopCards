@@ -51,10 +51,13 @@ class Actor:
         self.energy = 3
         # get hand
         self.get_cards()
+        self.execute_commands("posthand")
 
     def end_turn(self):
         for card in self.hand.cards[:]:
-            if card.exhaust and card.used or card.ethereal and not card.used:
+            if card.exhaust and card.used:
+                self.exhaust_card(card)
+            elif card.ethereal and not card.used:
                 self.exhaust_card(card)
             elif card.card_type.lower() == "power" and card.used:
                 self.power_used(card)
@@ -120,7 +123,7 @@ class Actor:
         self.vulnerable += turns
 
     def add_command(self, command):
-        self.commands[command.card_type].append(command)
+        self.commands[command.command_key].append(command)
         return self
 
     def execute_commands(self, key):
@@ -128,6 +131,7 @@ class Actor:
             for command in self.commands[key]:
                 command.execute(self)
         else:
+            # reflection
             module = import_module(f"cloneslay.commands.{key.lower()}")
             default_class = getattr(module, "Default")
             default_class().execute(self)

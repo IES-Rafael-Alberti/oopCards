@@ -10,16 +10,17 @@ class DisplayedCard:
     WIDTH = 250 / 1920
     HEIGHT = 320 / 1080
 
-    def __init__(self, card, frame):
+    def __init__(self, card, frame=None):
         self.card = card
-        self.frame_image = pygame.image.load(f"assets/cards/{frame}_blank.png").convert_alpha()
-        self.card_image = pygame.image.load(f"assets/cards/pictures/{card.picture}").convert_alpha()
+        self.frame = card.frame if frame is None else frame
+        self.frame_image = game.Game.load_image(f"cards/{frame}_blank")
+        self.card_image = game.Game.load_image(f"cards/pictures/{card.picture}")
+        self._generate_image()
         self.rect = None
         self.active = False
         self.used = False
 
-    def draw(self, screen, position):
-
+    def _generate_image(self):
         sprite = Surface((250, 320)).convert_alpha()
         sprite.fill(pygame.Color(255, 255, 255, 0))
         sprite.blit(scale(self.card_image, (180, 110)).convert_alpha(), Vector2(45, 60))
@@ -33,13 +34,18 @@ class DisplayedCard:
         for i, line in enumerate(self.card.description.split(".")):
             game.Game.print_text(sprite, line, Vector2(135, 215 + i * 20), color=pygame.Color("white"),
                                  font_family='assets/fonts/Karantina-Bold.ttf', size=24)
+        self.image = scale(sprite, game.Game.resize(250, 320))
         # when card is used, change alpha to 100
-        if self.card.used:
-            sprite.fill((255, 255, 255, 100), special_flags=pygame.BLEND_RGBA_MULT)
+        self.used_image = self.image.copy()
+        self.used_image.fill((255, 255, 255, 100), special_flags=pygame.BLEND_RGBA_MULT)
+
+    def update(self):
+        self._generate_image()
+
+    def draw(self, screen, position):
+        sprite = self.image if not self.card.used else self.used_image
         screen.blit(sprite, position + self.active * Vector2(0, -30))
         self.rect = sprite.get_rect().move(position + self.active * Vector2(0, -30))
         # height correction: avoid deactivation/activation loop under the card
         self.rect.height += self.active * 30
-        # width correction: blank space in frame picture
-        # self.rect.width -= 65
 

@@ -8,11 +8,9 @@ from pygame.transform import scale, flip
 from pygame.math import Vector2
 from game.frame import Frame
 from game.animation import Animation
-from pygame.pixelarray import PixelArray
 
 #  PEP 8: using import to avoid local name clash
 from game import game
-from game import animation
 
 
 class Character:
@@ -24,10 +22,12 @@ class Character:
         self.active = False
         self.flip = False
         self.position = Vector2(100, 250)
-        self.active_mark = scale(pygame.image.load("assets/your_turn_mark.png").convert_alpha(), (75, 75))
+        self.active_mark = scale(game.Game.load_image("your_turn_mark"), (75, 75))
         self._manage_health_bars()
         self._animations_load(folder)
-        self.animation = "Idle"
+        self._resize()
+        self.animation = "Idle_special"
+        self.update()
 
     def _animations_load(self, folder):
         self.animations = dict()
@@ -55,7 +55,7 @@ class Character:
             except IndexError:
                 pass
         for animation_name, frame_list in tags.items():
-            self.animations[animation_name]=Animation(animation_name, frame_list)
+            self.animations[animation_name] = Animation(animation_name, frame_list)
 
     def _manage_health_bars(self):
         self.healthbar = dict()
@@ -64,18 +64,40 @@ class Character:
                 name = file.name.replace(".png", "")
                 self.healthbar[name] = pygame.image.load(file.path).convert_alpha()
 
+    def _resize(self):
+        self.resized_active_mark = scale(self.active_mark, game.Game.resize((75, 75)))
+        for animation in self.animations.values():
+            animation.resize()
+
     def draw(self, screen):
-        sprite = scale(self.animations[self.animation].next_image(), (400, 400))
-        self.rect = sprite.get_rect().move(self.position)
+        position = game.Game.resize(self.position)
+        sprite = self.animations[self.animation].next_image().copy()
+        self.rect = sprite.get_rect().move(position)
         if self.flip:
             sprite = flip(sprite, True, False)
-
-        screen.blit(sprite, self.position)
+        screen.blit(sprite, position)
 
         if self.active:
-            screen.blit(self.active_mark, self.position + Vector2(sprite.get_rect().width//2, -85))
+            screen.blit(self.resized_active_mark,
+                        position + Vector2(sprite.get_rect().width//2, game.Game.resize_y(-85)))
 
         # health bar
+        screen.blit(self.health_sprite,
+                    position + Vector2(game.Game.resize_x(70),
+                                       self.rect.height - game.Game.resize_y(10)))
+
+        # info
+        if game.Game.debug:
+            screen.blit(self.info_sprite,
+                        position + self.flip * game.Game.resize(Vector2(250, 0)))
+
+    def update(self, resize=False):
+        if resize:
+            self._resize()
+        self._health_bar()
+        self._create_info()
+
+    def _health_bar(self):
         health_frame_key = "frame_armor" if self.actor.block_points else "frame_no_armor"
         health_bar_key = "bar_armor" if self.actor.block_points else "bar_no_armor"
         health_sprite = self.healthbar[health_frame_key].copy()
@@ -90,21 +112,23 @@ class Character:
             game.Game.print_text(health_sprite, f"{self.actor.block_points}", Vector2(20, 21),
                                  size=24, color=pygame.Color("black"))
             bar_text_color = pygame.Color("black")
-        game.Game.print_text(health_sprite, f"{self.actor.live_points}/{self.actor.max_live}", Vector2(160, 21),
+        game.Game.print_text(health_sprite, f"{self.actor.live_points}/{self.actor.max_live}",
+                             Vector2(160, 21),
                              size=24, color=bar_text_color)
-        screen.blit(health_sprite, self.position + Vector2(70, self.rect.height - 10))
+        self.health_sprite = scale(health_sprite, game.Game.resize(310, 44))
 
-        # info
-        if game.Game.debug:
-            self.show_info(screen)
-
-    def show_info(self, screen):
-        game.Game.print_text(screen, f"Energy: {self.actor.energy}", self.position + Vector2(-10, 0))
-        game.Game.print_text(screen, f"Block: {self.actor.block_points}", self.position + Vector2(-10, 25))
-        game.Game.print_text(screen, f"Live: {self.actor.live_points}/{self.actor.max_live}",
-                             self.position + Vector2(-10, 50))
-        game.Game.print_text(screen, f"W:{self.actor.weak} V:{self.actor.vulnerable} S:{self.actor.strength}",
-                             self.position + Vector2(-10, 75))
+    def _create_info(self):
+        sprite = Surface((250, 320)).convert_alpha()
+        sprite.fill(pygame.Color(255, 255, 255, 0))
+        game.Game.print_text(sprite, f"Energy: {self.actor.energy}",
+                             Vector2(125, 15))
+        game.Game.print_text(sprite, f"Block: {self.actor.block_points}",
+                             Vector2(125, 40))
+        game.Game.print_text(sprite, f"Live: {self.actor.live_points}/{self.actor.max_live}",
+                             Vector2(125, 65))
+        game.Game.print_text(sprite, f"W:{self.actor.weak} V:{self.actor.vulnerable} S:{self.actor.strength}",
+                             Vector2(125, 90))
+        self.info_sprite = scale(sprite, game.Game.resize(250, 320))
 
     def with_frame(self, frame):
         self.frame = frame

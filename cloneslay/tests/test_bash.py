@@ -11,8 +11,8 @@ def test_bash():
     assert actor2.vulnerable == 2
     actor2.block(10)
     my_bash.activate(actor1, actor2)
-    assert actor2.block_points == 290
-    assert actor2.live_points == 40
-    my_bash.activate(actor1, actor2)
+    assert actor2.live_points == 290
     assert actor2.block_points == 0
+    my_bash.activate(actor1, actor2)
     assert actor2.live_points == 278
+    assert actor2.block_points == 0
