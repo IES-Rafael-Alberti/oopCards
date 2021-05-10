@@ -39,6 +39,9 @@ class DisplayedCard:
         self.used_image = self.image.copy()
         self.used_image.fill((255, 255, 255, 100), special_flags=pygame.BLEND_RGBA_MULT)
 
+    def update(self):
+        self._generate_image()
+
     def draw(self, screen, position):
         sprite = self.image if not self.card.used else self.used_image
         screen.blit(sprite, position + self.active * Vector2(0, -30))

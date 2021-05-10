@@ -39,24 +39,26 @@ class Game:
         pygame.mouse.set_visible(False)
         # TODO: manage resolution change
         # init game window
-        self.screen = pygame.display.set_mode(Game.resolution)  # , pygame.FULLSCREEN)
+        self.screen = pygame.display.set_mode(Game.resolution, pygame.RESIZABLE)  # , pygame.FULLSCREEN)
         # set scene objects
         self.background = Background("background")
         self.cursor = Cursor("cursor")
         # self.cursor = scale(pygame.image.load("assets/cursor/cursor.png"), Game.resize(25, 25))
         self.characters = Game.load_characters()
-        self.end_turn_button = Button(scale(pygame.image.load("assets/end_turn.png"), Game.resize(250, 150)),
-                                      Game.resize(Vector2(1600, 700)), "End Turn")
+        self.buttons = [Button(scale(pygame.image.load("assets/end_turn.png"), (250, 150)),
+                               Vector2(1600, 700), "End Turn",
+                               self._end_turn)
+                        ]
 
     @staticmethod
     def _detect_max_resolution():
-        # Game.resolution = max(pygame.display.list_modes(depth=0),
-        #                       key=lambda mode: sum(mode))
-        Game.resolution = (1600, 900)
+        Game.resolution = max(pygame.display.list_modes(depth=0),
+                              key=lambda mode: sum(mode))
+        #Game.resolution = (1600, 900)
 
     def _init_objects(self):
-        self.actors = [self.characters["ironclad"].with_position(Game.resize(Vector2(100, 150))).activate(),
-                       self.characters["silent"].with_position(Game.resize(Vector2(1420, 150)))
+        self.actors = [self.characters["ironclad"].with_position(Vector2(100, 150)).activate(),
+                       self.characters["silent"].with_position(Vector2(1420, 150))
                            .with_frame("rogue").flipped()]
         self.active_actor = self.actors[0]
         self.active_actor.init_turn()
@@ -69,14 +71,22 @@ class Game:
                 quit()
             if event.type == pygame.MOUSEBUTTONUP and self.waiting:
                 self._handle_mouse_up()
+            if event.type == pygame.VIDEORESIZE:
+                Game.resolution = self.screen.get_width(), self.screen.get_height()
+                self.update_cards()
+                self.update_actors(resize=True)
+                self.update_buttons()
+                self.background.update()
+                self.cursor.update()
         # when game in inconsistent state don't poll mouse
         if self.waiting:
             self._handle_mouse_over()
 
     def _handle_mouse_up(self):
         # end turn button
-        if self.end_turn_button.rect.collidepoint(pygame.mouse.get_pos()):
-            self._end_turn()
+        for button in self.buttons:
+            if button.rect.collidepoint(pygame.mouse.get_pos()):
+                button.click()
         # cards in hand
         for card in self.active_card_deck:
             if not card.card.used and card.rect and card.rect.collidepoint(pygame.mouse.get_pos()) \
@@ -85,10 +95,19 @@ class Game:
                 card.active = False
                 self.active_actor.actor.energy -= card.card.energy
                 self.update_actors()
+                self.update_cards()
 
-    def update_actors(self):
+    def update_actors(self, resize=False):
         for actor in self.actors:
-            actor.update()
+            actor.update(resize)
+
+    def update_cards(self):
+        for card in self.active_card_deck:
+            card.update()
+
+    def update_buttons(self):
+        for button in self.buttons:
+            button.update()
 
     def _handle_mouse_over(self):
         for card in self.active_card_deck:
@@ -128,8 +147,7 @@ class Game:
         # prepared for animations state change
         pass
 
-    def draw_scene(self):
-        init_time = datetime.now()
+    def draw_scene(self, init_time=datetime.now()):
         self.background.draw(self.screen)
         for displayed_actor in self.actors:
             displayed_actor.draw(self.screen)
@@ -137,14 +155,17 @@ class Game:
             initial_position = int(1920 / 2 - 250 * len(self.active_card_deck) / 2)
             for i, card in enumerate(self.active_card_deck):
                 card.draw(self.screen, Game.resize(Vector2(initial_position + 250 * i, 600)))
-        self.end_turn_button.draw(self.screen)
+        for button in self.buttons:
+            button.draw(self.screen)
         self.cursor.draw(self.screen, pygame.mouse.get_pos())
-        Game.print_text(self.screen, str((datetime.now() - init_time).microseconds//1000), (100, 30))
+        if Game.debug:
+            Game.print_text(self.screen, str((datetime.now() - init_time).microseconds//1000), (100, 30))
         pygame.display.flip()
 
     def game_loop(self):
         clock = pygame.time.Clock()
         while True:
+            init_time = datetime.now()
             # manage user input
             self.handle_input()
             # end_time = datetime.now()
@@ -156,7 +177,7 @@ class Game:
             # print(end_time-init_time)
 
             # draw scene
-            self.draw_scene()
+            self.draw_scene(init_time)
             clock.tick(Game.FPS)
 
     def _set_active(self):

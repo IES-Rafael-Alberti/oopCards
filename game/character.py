@@ -21,11 +21,11 @@ class Character:
         self.rect = None
         self.active = False
         self.flip = False
-        self.position = game.Game.resize(Vector2(100, 250))
-        self.active_mark = scale(game.Game.load_image("your_turn_mark"), game.Game.resize(75, 75))
+        self.position = Vector2(100, 250)
+        self.active_mark = scale(game.Game.load_image("your_turn_mark"), (75, 75))
         self._manage_health_bars()
         self._animations_load(folder)
-        self.animations_resize()
+        self._resize()
         self.animation = "Idle_special"
         self.update()
 
@@ -64,31 +64,36 @@ class Character:
                 name = file.name.replace(".png", "")
                 self.healthbar[name] = pygame.image.load(file.path).convert_alpha()
 
-    def animations_resize(self):
+    def _resize(self):
+        self.resized_active_mark = scale(self.active_mark, game.Game.resize((75, 75)))
         for animation in self.animations.values():
             animation.resize()
 
     def draw(self, screen):
+        position = game.Game.resize(self.position)
         sprite = self.animations[self.animation].next_image().copy()
-        self.rect = sprite.get_rect().move(self.position)
+        self.rect = sprite.get_rect().move(position)
         if self.flip:
             sprite = flip(sprite, True, False)
-        screen.blit(sprite, self.position)
+        screen.blit(sprite, position)
 
         if self.active:
-            screen.blit(self.active_mark, self.position + game.Game.resize(Vector2(sprite.get_rect().width//2, -85)))
+            screen.blit(self.resized_active_mark,
+                        position + Vector2(sprite.get_rect().width//2, game.Game.resize_y(-85)))
 
         # health bar
         screen.blit(self.health_sprite,
-                    self.position + Vector2(game.Game.resize_x(70),
-                                            self.rect.height - game.Game.resize_y(10)))
+                    position + Vector2(game.Game.resize_x(70),
+                                       self.rect.height - game.Game.resize_y(10)))
 
         # info
         if game.Game.debug:
             screen.blit(self.info_sprite,
-                        self.position + self.flip * game.Game.resize(Vector2(250, 0)))
+                        position + self.flip * game.Game.resize(Vector2(250, 0)))
 
-    def update(self):
+    def update(self, resize=False):
+        if resize:
+            self._resize()
         self._health_bar()
         self._create_info()
 
