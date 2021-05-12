@@ -27,11 +27,14 @@ class Animation:
                                for frame in self.frames]
 
     def next_image(self):
+        animation_end = False
+        initial_index = self.index
         self.countdown -= 1
         if self.countdown <= 0:
             self.index += 1
             if int(self.index) >= len(self.frames):
                 self.index = 0
+                animation_end = True
             self.countdown = self.init_countdown()
-        return self.resized_frames[self.index].png
+        return self.resized_frames[initial_index].png, animation_end
 

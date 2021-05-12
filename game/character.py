@@ -1,3 +1,4 @@
+import random
 from os import scandir
 import json
 
@@ -26,7 +27,8 @@ class Character:
         self._manage_health_bars()
         self._animations_load(folder)
         self._resize()
-        self.animation = "Idle_special"
+        self.sequence = ["Idle", "Idle_special"]
+        self.animation = 0
         self.update()
 
     def _animations_load(self, folder):
@@ -71,7 +73,8 @@ class Character:
 
     def draw(self, screen):
         position = game.Game.resize(self.position)
-        sprite = self.animations[self.animation].next_image().copy()
+        sprite, animation_end = self.animations[self.sequence[self.animation]].next_image()
+        sprite = sprite.copy()
         self.rect = sprite.get_rect().move(position)
         if self.flip:
             sprite = flip(sprite, True, False)
@@ -90,6 +93,16 @@ class Character:
         if game.Game.debug:
             screen.blit(self.info_sprite,
                         position + self.flip * game.Game.resize(Vector2(250, 0)))
+
+        # next animation in sequence
+        if animation_end:
+            if self.animation:
+                self.animation = 0
+            else:
+                # 50% possibility of change
+                if not random.randrange(2):
+                    self.animation = random.choice(range(1, len(self.sequence)))
+
 
     def update(self, resize=False):
         if resize:
