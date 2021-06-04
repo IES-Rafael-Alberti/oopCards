@@ -96,6 +96,7 @@ class Game:
                 self.active_actor.actor.energy -= card.card.energy
                 self.update_actors()
                 self.update_cards()
+                self._set_active()
 
     def update_actors(self, resize=False):
         for actor in self.actors:
@@ -219,6 +220,8 @@ class Game:
         card_list.append("SwordBoomerang")
         card_list.append("Corruption")
         card_list.append("Barricade")
+        card_list.append("TrueGrit")
+        card_list.append("Clash")
         return [Card.get_card(card_name) for card_name in card_list]
 
     @staticmethod
