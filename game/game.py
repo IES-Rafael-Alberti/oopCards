@@ -92,8 +92,9 @@ class Game:
             if not card.card.used and card.rect and card.rect.collidepoint(pygame.mouse.get_pos()) \
                     and card.card.energy <= self.active_actor.actor.energy:
                 card.card.use(self.active_actor.actor, self.get_enemy())
-                card.active = False
-                self.active_actor.actor.energy -= card.card.energy
+                if card.card.used == True:
+                    card.active = False
+                    self.active_actor.actor.energy -= card.card.energy
                 self.update_actors()
                 self.update_cards()
                 self._set_active()
