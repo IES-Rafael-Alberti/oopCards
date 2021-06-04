@@ -7,5 +7,5 @@ class Bash(Card):
 
     def activate(self, actor, goal):
         Card.attack(8, actor, goal)
-        Card.add_vulnerable(2, goal)
+        actor.add_weakness(2, goal)
         # Card.discard_used_card("Bash", actor)

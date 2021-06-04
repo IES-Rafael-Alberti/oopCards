@@ -223,6 +223,7 @@ class Game:
         card_list.append("Barricade")
         card_list.append("TrueGrit")
         card_list.append("Clash")
+        card_list.append("Clothesline")
         return [Card.get_card(card_name) for card_name in card_list]
 
     @staticmethod

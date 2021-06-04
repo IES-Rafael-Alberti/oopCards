@@ -5,16 +5,16 @@ from cloneslay.card import Card
 
 class Clash (Card):
     def __init__(self):
-        super().__init__("Clash", 1, "Attack", "Can only be played if.every card in your.hand is an Attack.Deal 14 damage", "clash.png",
+        super().__init__("Clash", 0, "Attack", "Can only be played if.every card in your.hand is an Attack.Deal 14 damage", "clash.png",
 
                          rarity= "Common")
 
 
     # activate must have 2 arguments, you can make goal optional with default: goal=None
     def preconditions(self,actor):
-        for card in actor.hand.cards:
+        '''for card in actor.hand.cards:
             if card.card_type.lower != "attack":
-                return False
+                return False '''
         return  True
 
     def activate(self, actor, goal):
