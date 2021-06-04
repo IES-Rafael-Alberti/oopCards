@@ -10,4 +10,3 @@ class Uppercut(Card):
         Card.attack(13, actor, goal)
         goal.add_weakness(1)
         self.add_vulnerable(1,goal)
-        # Card.discard_used_card("Str

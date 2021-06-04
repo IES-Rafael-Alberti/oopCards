@@ -9,4 +9,3 @@ class Clothesline(Card):
     def activate(self, actor, goal):
         Card.attack(12, actor, goal)
         goal.add_weakness(2) #Apply Weakness 2 turn to Goal.
-        # Card.discard_used_card("Str
