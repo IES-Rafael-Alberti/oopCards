@@ -7,7 +7,6 @@ class Default(Command):
     def execute(self, actor):
         actor.block_points = 0
 
-
 class KeepBlock(Default):
     def execute(self, actor):
         pass

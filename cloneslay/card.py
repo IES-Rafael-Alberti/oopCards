@@ -18,11 +18,10 @@ class Card:
     def __str__(self):
         return f"{self.name}: {self.description}"
 
-    def preconditions(self,actor): #This method is called where a card have a conditions for be activated.
+    def preconditions(self, actor):  # This method is called where a card have a conditions for be activated.
         return True
 
     def use(self, actor, goal):
-        self.preconditions(actor)
         if self.preconditions(actor):
             self.used = True
             self.activate(actor, goal)
