@@ -10,4 +10,9 @@ def test_Anger():
     actor2 = Actor([])
     my_anger.activate(actor1, actor2)
     assert actor2.live_points == 294
-    assert actor1.g
+    def find_card(actor1,nombre):
+        for card in actor1.discarded.cards:
+            if card.name == nombre:
+                return True
+        return False
+    assert find_card(actor1,'Anger')

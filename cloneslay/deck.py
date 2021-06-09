@@ -26,10 +26,6 @@ class Deck:
     def size(self):
         return len(self.cards)
 
-    def find_card(self,card):
-        for card in
-
-
     def shuffle(self):
         random.shuffle(self.cards)
 
