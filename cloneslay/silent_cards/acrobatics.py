@@ -4,7 +4,7 @@ import random
 class Acrobatics (Card):
     def __init__(self):
         super().__init__("Acrobatics", 1, "Skill", "Draw 3 cards.Discard 1 card", "defense.png",
-                         rarity="starter")
+                         rarity="common")
 
     # activate must have 2 arguments, you can make goal optional with default: goal=None
     def activate(self, actor, goal=None):
