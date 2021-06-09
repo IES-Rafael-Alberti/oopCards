@@ -1,6 +1,8 @@
 import random
 import json
 import os
+
+from game import game
 from cloneslay.card import Card
 
 
@@ -44,6 +46,9 @@ class Deck:
     def transfer_card(self, card, receiver):
         self.delete_card(card)
         receiver.add_card(card)
+
+    def choose_card(self):
+        return game.Game.choose_card(self.cards)
 
     @staticmethod
     def load_deck(deck_name):

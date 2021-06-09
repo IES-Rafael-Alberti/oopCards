@@ -1,4 +1,5 @@
 import pygame
+import random
 from os import scandir
 from datetime import datetime
 
@@ -92,12 +93,17 @@ class Game:
             if not card.card.used and card.rect and card.rect.collidepoint(pygame.mouse.get_pos()) \
                     and card.card.energy <= self.active_actor.actor.energy:
                 card.card.use(self.active_actor.actor, self.get_enemy())
-                if card.card.used == True:
+                if card.card.used:
                     card.active = False
                     self.active_actor.actor.energy -= card.card.energy
                 self.update_actors()
                 self.update_cards()
                 self._set_active()
+
+    def _handle_mouse_over(self):
+        for card in self.active_card_deck:
+            if not card.card.used and card.rect:
+                card.active = card.rect.collidepoint(pygame.mouse.get_pos())
 
     def update_actors(self, resize=False):
         for actor in self.actors:
@@ -110,11 +116,6 @@ class Game:
     def update_buttons(self):
         for button in self.buttons:
             button.update()
-
-    def _handle_mouse_over(self):
-        for card in self.active_card_deck:
-            if not card.card.used and card.rect:
-                card.active = card.rect.collidepoint(pygame.mouse.get_pos())
 
     @staticmethod
     def resize(data, *args):
@@ -237,3 +238,7 @@ class Game:
         rect.center = position
         surface.blit(text_surface, rect)
 
+    @staticmethod
+    def choose_card(deck):
+        # TODO: develop card choosing
+        return random.choice(deck.cards)

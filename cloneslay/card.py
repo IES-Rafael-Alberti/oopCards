@@ -18,7 +18,7 @@ class Card:
     def __str__(self):
         return f"{self.name}: {self.description}"
 
-    def preconditions(self,actor): #This method is called where a card have a conditions for be activated.
+    def preconditions(self, actor):  # This method is called where a card have a conditions for be activated.
         return True
 
     def use(self, actor, goal):
@@ -31,8 +31,8 @@ class Card:
         pass
 
     @staticmethod
-    def attack(damage, attacker, goal):
-        damage = attacker.attack(damage)
+    def attack(damage, attacker, goal, times_strength=1):
+        damage = attacker.attack(damage, times_strength)
         goal.receive_attack(damage)
 
     @staticmethod

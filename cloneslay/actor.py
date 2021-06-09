@@ -63,6 +63,7 @@ class Actor:
                 self.power_used(card)
             card.used = False
         self.discard_hand()
+        self.execute_commands("endturn")
 
     # deck actions
     def get_cards(self, number=5):
@@ -79,10 +80,6 @@ class Actor:
         self.discarded.add_deck(self.hand)
         self.hand = Deck()
 
-    def discard_card(self, card_name):
-        self.discarded.add_one_card(self.hand.get_card_byname(card_name))
-        self.hand.delte_one_card(self.hand.get_card_byname(card_name))
-
     def exhaust_card(self, card):
         self.hand.transfer_card(card, self.exhausted)
 
@@ -90,9 +87,9 @@ class Actor:
         self.hand.transfer_card(card, self.powers_applied)
 
     # methods implementing card activation actions
-    def attack(self, damage):
+    def attack(self, damage, times_strength):
         if self.strength:
-            damage += self.strength
+            damage += self.strength * times_strength
         if self.weak:
             damage -= int(damage * 0.25)
         return damage
@@ -130,6 +127,8 @@ class Actor:
         if self.commands[key]:
             for command in self.commands[key]:
                 command.execute(self)
+                if not command.stable:
+                    self.commands[key].remove(command)
         else:
             # reflection
             module = import_module(f"cloneslay.commands.{key.lower()}")
