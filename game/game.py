@@ -228,6 +228,10 @@ class Game:
         card_list.append("Uppercut")
         card_list.append("Bludgeon")
         card_list.append("Anger")
+        card_list.append('Entrench')
+        card_list.append('DropKick')
+        card_list.append('Disarm')
+        card_list.append('BloodLetting')
         return [Card.get_card(card_name) for card_name in card_list]
 
     @staticmethod
