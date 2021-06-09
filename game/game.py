@@ -208,11 +208,11 @@ class Game:
         character_folders = scandir("assets/characters")
         for folder in character_folders:
             if folder.is_dir():
-                character_dict[folder.name] = Character(folder, Actor(Game.initial_deck()))
+                character_dict[folder.name] = Character(folder, Actor(Game.initial_ironclad_deck()))
         return character_dict
 
     @staticmethod
-    def initial_deck():
+    def initial_ironclad_deck():
         card_list = ["Strike"] * 3
         card_list.extend(["Defense"] * 3)
         card_list.append("Bash")
@@ -237,6 +237,12 @@ class Game:
         card_list.append("InfernalBlade")
         card_list.append("PommelStrike")
         return [Card.get_card(card_name) for card_name in card_list]
+
+    @staticmethod
+    def initial_silent_deck():
+        card_list =["Defense"]*6
+        return  [Card.get_card(card_name) for card_name in card_list]
+
 
     @staticmethod
     def print_text(surface, text, position, color=pygame.Color("white"),

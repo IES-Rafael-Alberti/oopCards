@@ -29,11 +29,10 @@ class DeckLab:
         # self.uncommon_cards = json.load(open("../assets/configuration_files/uncommon_cards.json"))
         # self.rare_cards = json.load(open("../assets/configuration_files/rare_cards.json"))
         # self.group_cards = self.separate_cards(self.common_cards)
-        self.new_deck = Deck(game.Game.initial_deck())
+        self.ironclad_deck = Deck(game.Game.initial_ironclad_deck())
         self.showed_cards = [DisplayedCard(card, "warrior")
-                             for card in self.new_deck.cards[:self.CARDS_ROW*self.ROWS]]
+                             for card in self.ironclad_deck.cards[:self.CARDS_ROW * self.ROWS]]
         self.configuration_file = json.load(open("assets/configuration_files/deck_lab_configuration.json"))
-
         self.waiting = True
         self.deck_lab_scene()
 
@@ -65,7 +64,7 @@ class DeckLab:
         self.left_button = Button(scale(pygame.image.load("assets/left_button.png"), (75, 50)),Vector2(50, 350),"")
         self.right_button = Button(scale(pygame.image.load("assets/right_button.png"), (75, 50)),Vector2(1800, 350), "")
         self.save_deck_name_button = Button(scale(pygame.image.load("assets/save_deck_name.png"), (250, 150)),Vector2(622, 900), "Save your Deck")
-        game.Game.print_text(self.screen,"Cards: "+str(self.new_deck.size())+"/", Vector2(10,10))
+        game.Game.print_text(self.screen,"Cards: " + str(self.ironclad_deck.size()) + "/", Vector2(10, 10))
 
     def handle_input(self):
         for event in pygame.event.get():
