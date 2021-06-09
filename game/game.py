@@ -236,7 +236,7 @@ class Game:
         card_list.append("HemoKinesis")
         card_list.append("InfernalBlade")
         card_list.append("PommelStrike")
-        card_list.append("Cleave")
+
         return [Card.get_card(card_name) for card_name in card_list]
 
     @staticmethod
