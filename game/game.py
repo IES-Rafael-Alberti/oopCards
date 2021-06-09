@@ -232,6 +232,7 @@ class Game:
         card_list.append('DropKick')
         card_list.append('Disarm')
         card_list.append('BloodLetting')
+        card_list.append("GhostlyArmor")
         return [Card.get_card(card_name) for card_name in card_list]
 
     @staticmethod
