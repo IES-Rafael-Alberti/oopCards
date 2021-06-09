@@ -3,7 +3,8 @@ from cloneslay.card import Card
 
 class Defense (Card):
     def __init__(self):
-        super().__init__("Defend", 1, "Skill", "Gain 5 Block", "defense.png")
+        super().__init__("Defend", 1, "Skill", "Gain 5 Block", "defense.png",
+                         rarity="starter")
 
     # activate must have 2 arguments, you can make goal optional with default: goal=None
     def activate(self, actor, goal=None):
