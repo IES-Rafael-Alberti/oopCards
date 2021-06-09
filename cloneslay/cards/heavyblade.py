@@ -8,5 +8,4 @@ class HeavyBlade(Card):
                          "barricade.png", rarity="common")
 
     def activate(self, actor, goal=None):
-        Card.attack(14, actor, goal)
-        # TODO: actor.add_command(preattack.IncreaseStrength("", 2))
+        Card.attack(14, actor, goal, 3)

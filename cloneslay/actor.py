@@ -87,9 +87,9 @@ class Actor:
         self.hand.transfer_card(card, self.powers_applied)
 
     # methods implementing card activation actions
-    def attack(self, damage):
+    def attack(self, damage, times_strength):
         if self.strength:
-            damage += self.strength
+            damage += self.strength * times_strength
         if self.weak:
             damage -= int(damage * 0.25)
         return damage

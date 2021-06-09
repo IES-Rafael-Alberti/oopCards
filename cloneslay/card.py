@@ -31,8 +31,8 @@ class Card:
         pass
 
     @staticmethod
-    def attack(damage, attacker, goal):
-        damage = attacker.attack(damage)
+    def attack(damage, attacker, goal, times_strength=1):
+        damage = attacker.attack(damage, times_strength)
         goal.receive_attack(damage)
 
     @staticmethod
