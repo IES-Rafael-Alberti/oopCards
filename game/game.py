@@ -234,6 +234,7 @@ class Game:
         card_list.append('BloodLetting')
         card_list.append("GhostlyArmor")
         card_list.append("HemoKinesis")
+        card_list.append("InfernalBlade")
         return [Card.get_card(card_name) for card_name in card_list]
 
     @staticmethod

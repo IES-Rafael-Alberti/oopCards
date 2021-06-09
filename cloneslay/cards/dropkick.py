@@ -1,5 +1,5 @@
 from cloneslay.card import Card
-
+import random
 
 class DropKick(Card):
     def __init__(self):
@@ -10,5 +10,5 @@ class DropKick(Card):
         Card.attack(5, actor, goal)
         if goal.vulnerable > 0:
             actor.energy +=1
-            actor.get_cards(1)
+            actor.hand.add_card(random.choice(actor.deck))
         # Card.discard_used_card("Strike", actor)
