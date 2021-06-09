@@ -22,7 +22,6 @@ class Card:
         return True
 
     def use(self, actor, goal):
-        self.preconditions(actor)
         if self.preconditions(actor):
             self.used = True
             self.activate(actor, goal)

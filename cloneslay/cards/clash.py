@@ -12,10 +12,10 @@ class Clash (Card):
 
     # activate must have 2 arguments, you can make goal optional with default: goal=None
     def preconditions(self,actor):
-        '''for card in actor.hand.cards:
-            if card.card_type.lower != "attack":
-                return False '''
-        return  True
+        for card in actor.hand.cards:
+            if card.card_type.lower != "attack" and not card.used:
+                return False
+        return True
 
     def activate(self, actor, goal):
         Card.attack(14, actor, goal)
