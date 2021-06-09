@@ -27,7 +27,8 @@ class Actor:
         self.energy = 3
 
         self.commands = {"blocking": [],
-                         "posthand": []}
+                         "posthand": [],
+                         "endturn": []}
 
         # Buffs
         self.strength = 0  # added to attack damage (absolute)
