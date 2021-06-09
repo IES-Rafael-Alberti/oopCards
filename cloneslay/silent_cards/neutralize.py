@@ -10,4 +10,4 @@ class Neutralize (Card):
     def activate(self, actor, goal):
         Card.attack(3,actor,goal)
         goal.add_weakness(1)
-        #Card.discard_used_card("Defend", actor)
+

@@ -9,4 +9,3 @@ class Survivor(Card):
     def activate(self, actor, goal):
         Card.attack(7, actor, goal)
         actor.hand.delete_card(random.choice(actor.hand.cards))
-        # Card.discard_used_card("Strike", actor)
