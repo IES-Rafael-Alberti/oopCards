@@ -8,6 +8,6 @@ class DaggerThrow(Card):
 
     def activate(self, actor, goal):
         Card.attack(9, actor, goal)
-        actor.hand.add_card(random.choice(actor.deck))
+        actor.draw.transfer_card(random.choice(actor.draw.cards),actor.hand)
         actor.hand.delete_card(random.choice(actor.hand.cards))
         # Card.discard_used_card("Strike", actor)

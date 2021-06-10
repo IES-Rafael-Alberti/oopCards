@@ -10,4 +10,4 @@ class Backflip (Card):
     def activate(self, actor, goal=None):
         Card.block(5, actor)
         for i in range(0, 1):
-            actor.hand.add_card(random.choice(actor.deck))
+            actor.draw.transfer_card(random.choice(actor.draw.cards),actor.hand)
