@@ -8,4 +8,5 @@ class PommelStrike(Card):
 
     def activate(self, actor, goal):
         Card.attack(9, actor, goal)
-        actor.hand.add_card(actor.draw.get(1))
+        actor.draw.transfer_card(random.choice(actor.draw.cards),actor.hand)
+

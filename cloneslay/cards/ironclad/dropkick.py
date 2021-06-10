@@ -10,5 +10,5 @@ class DropKick(Card):
         Card.attack(5, actor, goal)
         if goal.vulnerable > 0:
             actor.energy +=1
-            actor.hand.add_card(random.choice(actor.deck))
+            actor.draw.transfer_card(random.choice(actor.draw.cards),actor.hand)
         # Card.discard_used_card("Strike", actor)

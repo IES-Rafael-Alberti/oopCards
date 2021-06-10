@@ -8,8 +8,8 @@ class InfernalBlade(Card):
 
     def activate(self, actor, goal):
         attack = []
-        for card in actor.deck:
+        for card in actor.draw.cards:
             if card.card_type.lower() == 'attack':
                 attack.append(card)
-        actor.hand.add_card(random.choice(attack))
+        actor.draw.transfer_card(random.choice(actor.draw.cards),actor.hand)
 
