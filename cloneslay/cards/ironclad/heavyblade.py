@@ -1,5 +1,5 @@
 from cloneslay.card import Card
-from cloneslay.commands import preattack
+
 
 
 class HeavyBlade(Card):
