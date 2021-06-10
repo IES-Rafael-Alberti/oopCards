@@ -3,7 +3,7 @@ from cloneslay.card import Card
 
 class GhostlyArmor(Card):
     def __init__(self):
-        super().__init__("GhostlyArmor", 1, "Skill", "Ethereal. Gain 10 Block.", "GhostlyArmor.png",
+        super().__init__("GhostlyArmor", 1, "Skill", "Ethereal. Gain 10 Block.", "ghostlyarmor.png",
                          rarity="uncommon", ethereal=True)
 
     def activate(self, actor, goal):

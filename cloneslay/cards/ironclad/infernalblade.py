@@ -3,7 +3,7 @@ import random
 
 class InfernalBlade(Card):
     def __init__(self):
-        super().__init__("InfernalBlade", 1, "Skill", "Add a random Attack.into your hand. its costs 0 this turn.Exhaust", "infernalBlade.png",
+        super().__init__("InfernalBlade", 1, "Skill", "Add a random Attack.into your hand. its costs 0 this turn.Exhaust", "infernalblade.png",
                          rarity="uncommon", exhaust=True)
 
     def activate(self, actor, goal):

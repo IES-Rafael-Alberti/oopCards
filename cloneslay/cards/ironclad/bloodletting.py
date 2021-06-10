@@ -3,7 +3,7 @@ from cloneslay.card import Card
 
 class BloodLetting (Card):
     def __init__(self):
-        super().__init__("BloodLetting", 0, "Skill", "Lose 3 HP.Gain 2 energy", "Bloodletting.png")
+        super().__init__("BloodLetting", 0, "Skill", "Lose 3 HP.Gain 2 energy", "bloodletting.png")
 
     # activate must have 2 arguments, you can make goal optional with default: goal=None
     def activate(self, actor, goal=None):

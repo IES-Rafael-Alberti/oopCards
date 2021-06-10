@@ -3,7 +3,7 @@ from cloneslay.card import Card
 
 class Uppercut(Card):
     def __init__(self):
-        super().__init__("Uppercut", 2, "Attack", "Deal 13 damage.Apply 1 Weak.Apply 1 Vulnerable", "Uppercut.png",
+        super().__init__("Uppercut", 2, "Attack", "Deal 13 damage.Apply 1 Weak.Apply 1 Vulnerable", "uppercut.png",
                          rarity= "Uncommon")
 
     def activate(self, actor, goal):
