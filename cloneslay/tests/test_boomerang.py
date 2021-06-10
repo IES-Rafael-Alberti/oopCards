@@ -1,6 +1,6 @@
 from cloneslay.actor import Actor
-from cloneslay.cards.swordboomerang import SwordBoomerang
-from cloneslay.cards.defense import Defense
+from cloneslay.cards.ironclad.swordboomerang import SwordBoomerang
+from cloneslay.cards.ironclad.defense import Defense
 
 def test_swordboomerang():
     my_defense = Defense()

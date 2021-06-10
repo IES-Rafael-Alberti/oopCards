@@ -1,10 +1,7 @@
-import json
-import  importlib
-
 from cloneslay.actor import Actor
-from cloneslay.cards.strike import Strike
-from cloneslay.cards.carnage import Carnage
-from cloneslay.cards.defense import Defense
+from cloneslay.cards.ironclad.strike import Strike
+from cloneslay.cards.ironclad.carnage import Carnage
+from cloneslay.cards.ironclad.defense import Defense
 from cloneslay.deck import Deck
 import os
 def test_get_normal():

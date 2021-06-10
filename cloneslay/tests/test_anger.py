@@ -1,6 +1,6 @@
 from cloneslay.actor import Actor
-from cloneslay.cards.strike import Strike
-from cloneslay.cards.anger import Anger
+from cloneslay.cards.ironclad.strike import Strike
+from cloneslay.cards.ironclad.anger import Anger
 
 
 def test_Anger():

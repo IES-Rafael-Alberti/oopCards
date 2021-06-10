@@ -1,6 +1,6 @@
 from cloneslay.actor import Actor
-from cloneslay.cards.inflame import Inflame
-from cloneslay.cards.strike import Strike
+from cloneslay.cards.ironclad.inflame import Inflame
+from cloneslay.cards.ironclad.strike import Strike
 
 
 def test_inflame():

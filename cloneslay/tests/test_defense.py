@@ -1,6 +1,6 @@
 from cloneslay.actor import Actor
-from cloneslay.cards.strike import Strike
-from cloneslay.cards.defense import Defense
+from cloneslay.cards.ironclad.strike import Strike
+from cloneslay.cards.ironclad.defense import Defense
 
 def test_defense():
     my_defense = Defense()

@@ -1,5 +1,5 @@
 from cloneslay.actor import Actor
-from cloneslay.cards.bodyslam import BodySlam
+from cloneslay.cards.ironclad.bodyslam import BodySlam
 
 
 def test_bodyslam():

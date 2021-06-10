@@ -1,6 +1,6 @@
 from cloneslay.actor import Actor
-from cloneslay.cards.strike import Strike
-from cloneslay.cards.uppercut import Uppercut
+from cloneslay.cards.ironclad.strike import Strike
+from cloneslay.cards.ironclad.uppercut import Uppercut
 
 
 def test_strike():

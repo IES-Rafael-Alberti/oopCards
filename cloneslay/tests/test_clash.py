@@ -1,7 +1,7 @@
 from cloneslay.actor import Actor
-from cloneslay.cards.strike import Strike
-from cloneslay.cards.clash import Clash
-from cloneslay.cards.defense import Defense
+from cloneslay.cards.ironclad.strike import Strike
+from cloneslay.cards.ironclad.clash import Clash
+from cloneslay.cards.ironclad.defense import Defense
 
 
 def test_Clash():

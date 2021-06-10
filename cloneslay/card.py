@@ -48,8 +48,8 @@ class Card:
         actor.add_vulnerable(turns)
 
     @staticmethod
-    def get_card(class_name):
-        module = import_module(f"cloneslay.cards.{class_name.lower()}")
+    def get_card(class_name, deck="ironclad"):
+        module = import_module(f"cloneslay.cards.{deck}.{class_name.lower()}")
         card_class = getattr(module, class_name)
         return card_class()
 

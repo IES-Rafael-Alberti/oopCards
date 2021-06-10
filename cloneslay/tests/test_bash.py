@@ -1,5 +1,5 @@
 from cloneslay.actor import Actor
-from cloneslay.cards.bash import Bash
+from cloneslay.cards.ironclad.bash import Bash
 
 
 def test_bash():

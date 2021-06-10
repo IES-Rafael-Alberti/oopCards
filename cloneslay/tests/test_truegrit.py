@@ -1,6 +1,6 @@
 from cloneslay.actor import Actor
-from cloneslay.cards.strike import Strike
-from cloneslay.cards.truegrit import TrueGrit
+from cloneslay.cards.ironclad.strike import Strike
+from cloneslay.cards.ironclad.truegrit import TrueGrit
 
 def test_TrueGrit():
     my_TrueGrit = TrueGrit()

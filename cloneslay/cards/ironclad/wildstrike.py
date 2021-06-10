@@ -1,5 +1,5 @@
 from cloneslay.card import Card
-from cloneslay.cards.wound import Wound
+from cloneslay.cards.ironclad.wound import Wound
 from random import randrange
 
 

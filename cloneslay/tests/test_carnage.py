@@ -1,6 +1,6 @@
 from cloneslay.actor import Actor
-from cloneslay.cards.carnage import Carnage
-from cloneslay.cards.defense import Defense
+from cloneslay.cards.ironclad.carnage import Carnage
+from cloneslay.cards.ironclad.defense import Defense
 
 def test_carnage():
     my_defense = Defense()
